@@ -1,0 +1,2639 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Trực Quan Chứng Từ Hải Quan - Chương 2A</title>
+    <!-- Font Awesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- html2pdf.js for exporting PDF A4 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --bg-light-blue: #e8f4f8;
+            --primary-blue: #0284c7;
+            --dark-blue: #0369a1;
+            --light-yellow: #fef9c3;
+            --yellow-border: #fde047;
+            --yellow-accent: #eab308;
+            --bright-red: #ef4444;
+            --dark-red: #dc2626;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --white: #ffffff;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --border-radius: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light-blue);
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--dark-blue), var(--primary-blue));
+            color: var(--white);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-title h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .header-subtitle {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .badge-edu {
+            background-color: var(--bright-red);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .btn-gv {
+            background-color: #10b981;
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .btn-gv:hover {
+            background-color: #059669;
+        }
+
+        /* Layout Main */
+        .app-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            height: calc(100vh - 65px);
+        }
+
+        /* Sidebar Navigation */
+        sidebar {
+            width: 280px;
+            background-color: var(--white);
+            border-right: 1px solid #cbd5e1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 1rem 0;
+        }
+
+        .menu-category {
+            padding: 0.5rem 1.2rem;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .menu-item {
+            padding: 0.8rem 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border-left: 4px solid transparent;
+        }
+
+        .menu-item:hover {
+            background-color: var(--bg-light-blue);
+            color: var(--primary-blue);
+        }
+
+        .menu-item.active {
+            background-color: #e0f2fe;
+            color: var(--dark-blue);
+            border-left-color: var(--bright-red);
+            font-weight: 600;
+        }
+
+        .menu-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        /* Content Area */
+        main {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Tab Content Containers */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Module Header Card */
+        .module-header {
+            background-color: var(--white);
+            padding: 1.2rem 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            border-left: 6px solid var(--primary-blue);
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .module-title {
+            font-size: 1.3rem;
+            color: var(--dark-blue);
+            margin-bottom: 0.3rem;
+        }
+
+        .module-desc {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Split Screen Layout for Theory vs Document */
+        .doc-viewer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        @media (max-width: 1024px) {
+            .doc-viewer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Theory Card */
+        .theory-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            border-top: 3px solid var(--primary-blue);
+        }
+
+        .section-h3 {
+            color: var(--dark-blue);
+            font-size: 1.1rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 2px solid var(--bg-light-blue);
+            padding-bottom: 0.4rem;
+        }
+
+        .theory-p {
+            font-size: 0.92rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            color: #334155;
+        }
+
+        .theory-list {
+            padding-left: 1.2rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .theory-list li {
+            margin-bottom: 0.4rem;
+        }
+
+        /* Red Warning / Alert Box */
+        .alert-box {
+            background-color: #fef2f2;
+            border: 1px solid #fca5a5;
+            border-left: 4px solid var(--bright-red);
+            padding: 0.8rem 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+            font-size: 0.88rem;
+            color: #991b1b;
+        }
+
+        .alert-box strong {
+            color: var(--dark-red);
+        }
+
+        /* Yellow Highlight / Note Box */
+        .note-box {
+            background-color: var(--light-yellow);
+            border: 1px solid var(--yellow-border);
+            border-left: 4px solid var(--yellow-accent);
+            padding: 0.8rem 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+            font-size: 0.88rem;
+            color: #713f12;
+        }
+
+        /* Document Paper Representation */
+        .paper-document {
+            background-color: var(--white);
+            border: 1px solid #cbd5e1;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            padding: 2rem;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.82rem;
+            line-height: 1.4;
+            color: #1e293b;
+            position: relative;
+        }
+
+        .paper-header {
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            border-bottom: 2px solid #000;
+            padding-bottom: 0.5rem;
+        }
+
+        .paper-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .paper-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .paper-table th, .paper-table td {
+            border: 1px solid #000;
+            padding: 6px;
+            text-align: left;
+            font-size: 0.8rem;
+        }
+
+        .paper-table th {
+            background-color: #f1f5f9;
+        }
+
+        /* Interactive Hotspots on Document */
+        .hotspot {
+            background-color: rgba(253, 224, 71, 0.4);
+            border: 1px dashed var(--yellow-accent);
+            padding: 2px 4px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-block;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .hotspot:hover {
+            background-color: var(--bright-red);
+            color: white;
+            border-color: var(--dark-red);
+        }
+
+        .hotspot-active {
+            background-color: var(--bright-red) !important;
+            color: white !important;
+        }
+
+        /* Interactive Calculator Tool */
+        .calc-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            border-top: 4px solid var(--bright-red);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            color: var(--text-dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--dark-blue);
+        }
+
+        .btn-danger {
+            background-color: var(--bright-red);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: var(--dark-red);
+        }
+
+        .btn-success {
+            background-color: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #059669;
+        }
+
+        .calc-result-box {
+            background-color: var(--light-yellow);
+            border: 1px solid var(--yellow-border);
+            border-radius: 6px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .calc-result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.4rem 0;
+            border-bottom: 1px dashed #ca8a04;
+            font-size: 0.9rem;
+        }
+
+        .calc-result-item:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            font-size: 1rem;
+            color: var(--dark-red);
+        }
+
+        /* Interactive Quiz / Audit Mode */
+        .audit-item {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--card-shadow);
+            border-left: 4px solid var(--yellow-accent);
+        }
+
+        .audit-question {
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            color: var(--dark-blue);
+        }
+
+        .audit-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .option-btn {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 0.6rem 1rem;
+            border-radius: 4px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.88rem;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover {
+            background-color: var(--bg-light-blue);
+        }
+
+        .option-btn.correct {
+            background-color: #dcfce7;
+            border-color: #86efac;
+            color: #166534;
+            font-weight: bold;
+        }
+
+        .option-btn.wrong {
+            background-color: #fee2e2;
+            border-color: #fca5a5;
+            color: #991b1b;
+        }
+
+        .explanation {
+            margin-top: 0.8rem;
+            padding: 0.8rem;
+            background-color: #f1f5f9;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            display: none;
+        }
+
+        /* Tooltip Popover */
+        .tooltip-popover {
+            position: absolute;
+            background-color: var(--text-dark);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            z-index: 100;
+            max-width: 250px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            display: none;
+        }
+
+        /* Incoterms Graphic Flow */
+        .incoterms-flow {
+            display: flex;
+            margin: 1rem 0;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            overflow: hidden;
+            font-size: 0.8rem;
+        }
+
+        .incoterm-block {
+            flex: 1;
+            padding: 0.8rem 0.4rem;
+            text-align: center;
+            border-right: 1px solid #cbd5e1;
+        }
+
+        .incoterm-seller {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .incoterm-buyer {
+            background-color: var(--light-yellow);
+            color: #854d0e;
+        }
+
+        /* Accordion Styles for Practice Section */
+        .accordion-item {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            margin-bottom: 0.8rem;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        .accordion-header {
+            background-color: #ffffff;
+            padding: 1rem 1.2rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--dark-blue);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
+
+        .accordion-header:hover {
+            background-color: var(--bg-light-blue);
+        }
+
+        .accordion-content {
+            padding: 1.2rem;
+            border-top: 1px solid #e2e8f0;
+            background-color: #f8fafc;
+            display: none;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .accordion-content.open {
+            display: block;
+        }
+
+        .exercise-data-card {
+            background-color: var(--white);
+            border: 1px solid #cbd5e1;
+            padding: 0.8rem 1rem;
+            border-radius: 6px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            margin: 0.8rem 0;
+        }
+
+        /* Styles bổ sung cho Tab Kiểm tra & Modal GV */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 350px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .exam-item {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 1.2rem;
+            margin-bottom: 1.2rem;
+            box-shadow: var(--card-shadow);
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .exam-item-title {
+            font-weight: 700;
+            color: var(--dark-blue);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .student-answer-area {
+            width: 100%;
+            height: 90px;
+            padding: 0.6rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            resize: vertical;
+        }
+
+        .gv-answer-box {
+            background-color: #f0fdf4;
+            border: 1px solid #86efac;
+            border-left: 4px solid #16a34a;
+            padding: 0.8rem 1rem;
+            border-radius: 6px;
+            margin-top: 0.8rem;
+            font-size: 0.88rem;
+            color: #14532d;
+            display: none;
+        }
+
+        .student-info-card {
+            background-color: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            margin-bottom: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 1rem;
+            align-items: flex-end;
+        }
+
+        @media (max-width: 768px) {
+            .student-info-card {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Printable Layout PDF */
+        #pdf-export-container {
+            background: white;
+            color: black;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        /* Style Bổ sung cho Tab Phiếu Gom Dữ Liệu */
+        .ecus-form-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            border-top: 4px solid var(--primary-blue);
+        }
+
+        .ecus-section-title {
+            font-weight: bold;
+            font-size: 1rem;
+            color: var(--dark-blue);
+            margin-bottom: 0.8rem;
+            border-bottom: 1px solid #cbd5e1;
+            padding-bottom: 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ecus-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .ecus-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .ecus-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .ecus-table th, .ecus-table td {
+            border: 1px solid #cbd5e1;
+            padding: 6px 8px;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        .ecus-table th {
+            background-color: #f1f5f9;
+            color: var(--dark-blue);
+            font-weight: 600;
+        }
+
+        .ecus-table input {
+            width: 100%;
+            padding: 4px;
+            border: 1px solid #cbd5e1;
+            border-radius: 3px;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        .ecus-table input.read-only-calc {
+            background-color: #f8fafc;
+            font-weight: bold;
+            color: #0369a1;
+        }
+
+        /* A4 Print Standard Template Styling */
+        .pdf-a4-page {
+            width: 100%;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 11pt;
+            line-height: 1.15;
+            color: #000;
+            background: #fff;
+        }
+        .pdf-a4-page table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .pdf-a4-page th, .pdf-a4-page td {
+            border: 1px solid #000;
+            padding: 5px;
+            font-size: 10.5pt;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="header-title">
+            <i class="fa-solid fa-ship fa-xl"></i>
+            <div>
+                <h1>PHẦN MỀM GIẢNG DẠY CHỨNG TỪ HẢI QUAN</h1>
+                <div class="header-subtitle">Môn: Khai Báo Hải Quan - Chương 2A: Bộ Chứng Từ Xuất Nhập Khẩu</div>
+            </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <span id="badge-gv" class="badge-edu" style="background-color: #10b981; display: none;">
+                <i class="fa-solid fa-user-tie"></i> GIẢNG VIÊN (PASS ĐÚNG)
+            </span>
+            <button class="btn-gv" onclick="openGvModal()">
+                <i class="fa-solid fa-lock"></i> 
+            </button>
+            <span class="badge-edu"><i class="fa-solid fa-graduation-cap"></i> Trực Quan Hoá</span>
+        </div>
+    </header>
+
+    <!-- Modal Pass GV -->
+    <div id="gv-modal" class="modal-overlay">
+        <div class="modal-card">
+            <h3 style="margin-bottom: 1rem; color: var(--dark-blue);"><i class="fa-solid fa-user-shield"></i> Dành Cho Giảng Viên</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Nhập mật khẩu để mở quyền xem đáp án Tab Kiểm Tra:</p>
+            <input type="password" id="gv-pass-input" class="form-control" placeholder="Mật khẩu..." style="margin-bottom: 1rem; text-align: center;">
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button class="btn btn-primary" onclick="checkGvPass()"><i class="fa-solid fa-check"></i> Xác nhận</button>
+                <button class="btn btn-danger" onclick="closeGvModal()"><i class="fa-solid fa-xmark"></i> Hủy</button>
+            </div>
+            <div id="gv-pass-error" style="color: var(--bright-red); font-size: 0.8rem; margin-top: 0.8rem; display: none;">
+                Mật khẩu không đúng! Vui lòng thử lại.
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="app-container">
+        
+        <!-- Sidebar Navigation -->
+        <sidebar>
+            <ul class="sidebar-menu">
+                <li class="menu-category">Chương 2A - Nội dung chứng từ</li>
+                <li class="menu-item active" onclick="switchTab('tab-overview', this)">
+                    <i class="fa-solid fa-compass" style="color: var(--primary-blue);"></i>
+                    <span>1. Tổng Quan & Mục Tiêu</span>
+                </li>
+                <li class="menu-item" onclick="switchTab('tab-contract', this)">
+                    <i class="fa-solid fa-file-contract" style="color: var(--primary-blue);"></i>
+                    <span>2. Hợp Đồng Ngoại Thương</span>
+                </li>
+                <li class="menu-item" onclick="switchTab('tab-invoice', this)">
+                    <i class="fa-solid fa-file-invoice-dollar" style="color: var(--yellow-accent);"></i>
+                    <span>3. Hóa Đơn Thương Mại</span>
+                </li>
+                <li class="menu-item" onclick="switchTab('tab-packing', this)">
+                    <i class="fa-solid fa-box-open" style="color: var(--yellow-accent);"></i>
+                    <span>4. Phiếu Đóng Gói (P/L)</span>
+                </li>
+                <li class="menu-item" onclick="switchTab('tab-bol', this)">
+                    <i class="fa-solid fa-ship" style="color: var(--primary-blue);"></i>
+                    <span>5. Vận Đơn (Bill of Lading)</span>
+                </li>
+                <li class="menu-item" onclick="switchTab('tab-co', this)">
+                    <i class="fa-solid fa-certificate" style="color: var(--bright-red);"></i>
+                    <span>6. Chứng Nhận Xuất Xứ (C/O)</span>
+                </li>
+                <li class="menu-item" onclick="switchTab('tab-arrival', this)">
+                    <i class="fa-solid fa-bell" style="color: var(--primary-blue);"></i>
+                    <span>7. Thông Báo Nhận Hàng</span>
+                </li>
+
+                <li class="menu-category">Thực Hành & Ôn Tập</li>
+                <li class="menu-item" onclick="switchTab('tab-ecus-sheet', this)">
+                    <i class="fa-solid fa-table-list" style="color: #10b981;"></i>
+                    <span>8. Phiếu Gom Dữ Liệu Tờ Khai</span>
+                </li>
+                <li class="menu-item" onclick="switchTab('tab-exercises', this)">
+                    <i class="fa-solid fa-pen-to-square" style="color: var(--bright-red);"></i>
+                    <span>Ôn Tập & Bài Tập Thực Hành</span>
+                </li>
+                <li class="menu-item" onclick="switchTab('tab-calc', this)">
+                    <i class="fa-solid fa-calculator" style="color: var(--bright-red);"></i>
+                    <span>Công Cụ Tính Trị Giá HQ</span>
+                </li>
+                <li class="menu-item" onclick="switchTab('tab-audit', this)">
+                    <i class="fa-solid fa-magnifying-glass-chart" style="color: var(--bright-red);"></i>
+                    <span>Kiểm Tra Chéo Hồ Sơ</span>
+                </li>
+                
+                <li class="menu-category" style="color: var(--bright-red);">Đánh Giá Học Tập</li>
+                <li class="menu-item" onclick="switchTab('tab-exam', this)">
+                    <i class="fa-solid fa-file-export" style="color: var(--bright-red);"></i>
+                    <span>9. Kiểm Tra & Luyện Tập 30 Bài</span>
+                </li>
+            </ul>
+        </sidebar>
+
+        <!-- Main Content Area -->
+        <main>
+
+            <!-- TAB 1: OVERVIEW -->
+            <div id="tab-overview" class="tab-content active">
+                <div class="module-header">
+                    <div>
+                        <h2 class="module-title">Mục Tiêu & Tổng Quan Chương 2A: Chứng Từ Hải Quan</h2>
+                        <p class="module-desc">Nắm vững khái niệm, vai trò, kỹ năng đọc và đối chiếu bộ chứng từ XNK</p>
+                    </div>
+                    <i class="fa-solid fa-book-open fa-2xl" style="color: var(--primary-blue);"></i>
+                </div>
+
+                <div class="doc-viewer-grid">
+                    <div class="theory-card">
+                        <h3 class="section-h3"><i class="fa-solid fa-bullseye"></i> 1. Mục Tiêu Học Tập</h3>
+                        <p class="theory-p">Sau khi hoàn thành chương này, sinh viên có khả năng:</p>
+                        <ul class="theory-list">
+                            <li><strong>Kiến thức:</strong> Trình bày rõ khái niệm, vai trò, các chỉ tiêu dữ liệu trên bộ chứng từ (Contract, Invoice, Packing List, B/L, C/O, Arrival Notice).</li>
+                            <li><strong>Kỹ năng:</strong> Đọc hiểu, phân tích, phát hiện sai sót chéo giữa các chứng từ trước khi truyền Tờ khai Hải quan điện tử.</li>
+                            <li><strong>Thái độ:</strong> Rèn luyện tính tỉ mỉ, cẩn thận, chính xác tuyệt đối và tuân thủ pháp luật hải quan.</li>
+                        </ul>
+
+                        <div class="alert-box">
+                            <strong><i class="fa-solid fa-triangle-exclamation"></i> Cảnh báo nghiệp vụ:</strong> Sai lệch thông tin giữa các chứng từ (như Tên hàng, Trọng lượng, Điều kiện giao hàng) sẽ dẫn đến bị phân Luồng Vàng/Đỏ, truy thu thuế hoặc phạt vi phạm hành chính!
+                        </div>
+                    </div>
+
+                    <div class="theory-card" style="border-top-color: var(--yellow-accent);">
+                        <h3 class="section-h3" style="color: var(--yellow-accent);"><i class="fa-solid fa-diagram-project"></i> 2. Mối Quan Hệ Giữa Các Chứng Từ</h3>
+                        <p class="theory-p">Hồ sơ Hải quan là một hệ thống nhất quán. Dữ liệu từ chứng từ này là căn cứ kiểm tra của chứng từ khác:</p>
+                        
+                        <div style="background-color: var(--bg-light-blue); padding: 1rem; border-radius: 6px; font-size: 0.88rem;">
+                            <div style="margin-bottom: 8px;"><strong>1. Sales Contract:</strong> Thỏa thuận gốc về Hàng hóa, Giá, Incoterms, Thanh toán.</div>
+                            <div style="margin-bottom: 8px;"><strong>2. Commercial Invoice:</strong> Cụ thể hóa giá trị thanh toán, căn cứ tính Trị giá Hải quan.</div>
+                            <div style="margin-bottom: 8px;"><strong>3. Packing List:</strong> Mô tả quy cách vật lý (Số kiện, GW, NW) đối chiếu thực tế hàng hóa.</div>
+                            <div style="margin-bottom: 8px;"><strong>4. Bill of Lading:</strong> Xác nhận vận chuyển, quyền sở hữu hàng và thông số vận tải.</div>
+                            <div style="margin-bottom: 8px;"><strong>5. Certificate of Origin:</strong> Căn cứ áp dụng Thuế suất ưu đãi đặc biệt (0%).</div>
+                        </div>
+
+                        <div class="note-box">
+                            <strong><i class="fa-solid fa-lightbulb"></i> Lời khuyên Giảng viên:</strong> Sử dụng các Tab chức năng bên trái để đi sâu từng chứng từ, kết hợp công cụ Tính Trị Giá và Kiểm Trợ Chéo để thực hành.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: SALES CONTRACT -->
+            <div id="tab-contract" class="tab-content">
+                <div class="module-header">
+                    <div>
+                        <h2 class="module-title">2.1 Hợp Đồng Ngoại Thương (Sales Contract)</h2>
+                        <p class="module-desc">Cơ sở pháp lý tối cao của giao dịch mua bán quốc tế</p>
+                    </div>
+                    <i class="fa-solid fa-file-contract fa-2xl" style="color: var(--primary-blue);"></i>
+                </div>
+
+                <div class="doc-viewer-grid">
+                    <div class="theory-card">
+                        <h3 class="section-h3"><i class="fa-solid fa-book"></i> Lý Thuyết Cốt Lõi</h3>
+                        <p class="theory-p"><strong>Khái niệm:</strong> Hợp đồng ngoại thương là thỏa thuận giữa bên bán và bên mua ở 2 quốc gia khác nhau về việc mua bán hàng hóa.</p>
+                        
+                        <h4 style="font-size: 0.95rem; color: var(--dark-blue); margin: 0.8rem 0 0.4rem 0;">Vai trò trong Khai Hải Quan:</h4>
+                        <ul class="theory-list">
+                            <li>Xác định Chủ thể (Exporter / Importer) - Phải khớp 100% với Invoice, B/L.</li>
+                            <li>Xác định Mô tả hàng hóa & Giá trị (Giá mua bán thực tế).</li>
+                            <li>Xác định Điều kiện giao hàng Incoterms (Căn cứ tính trị giá tính thuế).</li>
+                            <li>Xác định Phương thức thanh toán (T/T, L/C, D/P, D/A).</li>
+                        </ul>
+
+                        <div class="alert-box">
+                            <strong>Mô tả hàng hóa chính xác:</strong> Tránh mô tả chung chung như "Electronic accessories". Phải ghi rõ tên, Model, thông số kỹ thuật (Ví dụ: "Wireless Optical Mouse Model M202 – USB – 2.4GHz") để phân loại mã HS.
+                        </div>
+
+                        <h4 style="font-size: 0.95rem; color: var(--dark-blue); margin: 0.8rem 0 0.4rem 0;">Tóm tắt Incoterms 2020 Phổ Biến:</h4>
+                        <div class="incoterms-flow">
+                            <div class="incoterm-block incoterm-buyer"><strong>EXW:</strong> Người mua lo từ A-Z tại xưởng</div>
+                            <div class="incoterm-block incoterm-seller"><strong>FOB:</strong> Người bán giao lên tàu tại cảng đi</div>
+                            <div class="incoterm-block incoterm-seller"><strong>CIF:</strong> Người bán lo Cước biển + Bảo hiểm đến cảng đến</div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="margin-bottom: 0.5rem; font-weight: bold; font-size: 0.9rem; color: var(--dark-blue);">
+                            <i class="fa-solid fa-hand-pointer"></i> Nhấp vào vùng tô vàng để xem giải thích nghiệp vụ:
+                        </div>
+                        <div class="paper-document">
+                            <div class="paper-header">SALES CONTRACT</div>
+                            <div class="paper-row">
+                                <div><strong>Contract No:</strong> SC2026-018</div>
+                                <div><strong>Date:</strong> 12 March 2026</div>
+                            </div>
+                            <br>
+                            <div><strong>SELLER:</strong> <span class="hotspot" onclick="showTip(this, 'SELLER: Phải trùng khớp tuyệt đối với thông tin Exporter trên Invoice, Shipper trên B/L và C/O.')">ABC ELECTRONICS CO., LTD</span></div>
+                            <div>Address: Shenzhen, China</div>
+                            <br>
+                            <div><strong>BUYER:</strong> <span class="hotspot" onclick="showTip(this, 'BUYER: Phải trùng khớp với Importer trên Invoice, Consignee trên B/L và Tờ khai HQ.')">VIET TECH IMPORT EXPORT CO., LTD</span></div>
+                            <div>Address: Ho Chi Minh City, Vietnam</div>
+                            <br>
+                            <div><strong>COMMODITY:</strong> <span class="hotspot" onclick="showTip(this, 'MÔ TẢ HÀNG: Cần đủ thông tin model, thông số để tra mã HS 8 chữ số chính xác.')">Wireless Optical Mouse Model M202</span></div>
+                            <div><strong>QUANTITY:</strong> 5,000 pcs</div>
+                            <div><strong>UNIT PRICE:</strong> USD 3.50 / pc</div>
+                            <div><strong>TOTAL AMOUNT:</strong> USD 17,500.00</div>
+                            <br>
+                            <div><strong>DELIVERY TERM:</strong> <span class="hotspot" onclick="showTip(this, 'FOB Shenzhen: Người mua chịu cước vận chuyển (F) và bảo hiểm (I) từ Shenzhen về VN. Khi tính Trị giá HQ (CIF) phải cộng thêm F + I!')">FOB Shenzhen – Incoterms 2020</span></div>
+                            <div><strong>PAYMENT TERM:</strong> <span class="hotspot" onclick="showTip(this, 'T/T 30/70: Chuyển tiền điện tử. Cần lưu lại Giấy báo nợ/Chuyển tiền ngân hàng để trình Hải quan khi kiểm tra trị giá.')">T/T 30% deposit, 70% before shipment</span></div>
+                            <div><strong>SHIPMENT:</strong> March 2026</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: COMMERCIAL INVOICE -->
+            <div id="tab-invoice" class="tab-content">
+                <div class="module-header">
+                    <div>
+                        <h2 class="module-title">2.2 Hóa Đơn Thương Mại (Commercial Invoice)</h2>
+                        <p class="module-desc">Chứng từ trung tâm xác định trị giá giao dịch và tính thuế hải quan</p>
+                    </div>
+                    <i class="fa-solid fa-file-invoice-dollar fa-2xl" style="color: var(--yellow-accent);"></i>
+                </div>
+
+                <div class="doc-viewer-grid">
+                    <div class="theory-card">
+                        <h3 class="section-h3"><i class="fa-solid fa-book"></i> Vai Trò Trong Khai Báo Hải Quan</h3>
+                        <p class="theory-p">Hóa đơn thương mại là chứng từ do người bán phát hành để yêu cầu người mua thanh toán tiền hàng.</p>
+                        
+                        <div class="note-box">
+                            <strong><i class="fa-solid fa-star"></i> Tầm quan trọng Hải Quan:</strong>
+                            <ul style="padding-left: 1.2rem; margin-top: 5px;">
+                                <li>Căn cứ chính xác định <strong>Trị Giá Hải Quan</strong>.</li>
+                                <li>Căn cứ tính <strong>Thuế Nhập Khẩu & Thuế GTGT (VAT)</strong>.</li>
+                                <li>Quy đổi ngoại tệ ra VND theo Tỷ giá Hải quan niêm yết tại thời điểm mở tờ khai.</li>
+                            </ul>
+                        </div>
+
+                        <div class="alert-box">
+                            <strong>Công thức Quy Đổi Trị Giá Hải Quan Tính Thuế:</strong><br>
+                            <code>Trị giá tính thuế (VND) = Trị giá Hải quan (CIF - USD) x Tỷ giá Hải quan</code>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="paper-document">
+                            <div class="paper-header">COMMERCIAL INVOICE</div>
+                            <div class="paper-row">
+                                <div><strong>Invoice No:</strong> <span class="hotspot" onclick="showTip(this, 'SỐ HÓA ĐƠN: Bắt buộc khai chính xác trên Tờ khai HQ điện tử ô Commercial Invoice No.')">INV2026-015</span></div>
+                                <div><strong>Date:</strong> 15 March 2026</div>
+                            </div>
+                            <br>
+                            <div><strong>SELLER:</strong> ABC ELECTRONICS CO., LTD, Shenzhen, China</div>
+                            <div><strong>BUYER:</strong> VIET TECH IMPORT EXPORT CO., LTD, HCMC, Vietnam</div>
+                            <br>
+                            <table class="paper-table">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Description</th>
+                                        <th>Qty</th>
+                                        <th>Unit Price</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Wireless Optical Mouse Model M202</td>
+                                        <td>5,000 pcs</td>
+                                        <td><span class="hotspot" onclick="showTip(this, 'ĐƠN GIÁ: 3.50 USD/pc theo điều kiện FOB.')">USD 3.50</span></td>
+                                        <td><strong>USD 17,500.00</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="paper-row">
+                                <div><strong>TOTAL AMOUNT:</strong></div>
+                                <div><span class="hotspot" onclick="showTip(this, 'TỔNG TIỀN HÓA ĐƠN: 17,500 USD (FOB).')">USD 17,500.00</span></div>
+                            </div>
+                            <div><strong>TERMS OF DELIVERY:</strong> FOB Shenzhen – Incoterms 2020</div>
+                            <div><strong>TERMS OF PAYMENT:</strong> T/T</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 4: PACKING LIST -->
+            <div id="tab-packing" class="tab-content">
+                <div class="module-header">
+                    <div>
+                        <h2 class="module-title">2.3 Phiếu Đóng Gói (Packing List)</h2>
+                        <p class="module-desc">Chi tiết đóng gói vật lý, trọng lượng và dung tích lô hàng</p>
+                    </div>
+                    <i class="fa-solid fa-box-open fa-2xl" style="color: var(--yellow-accent);"></i>
+                </div>
+
+                <div class="doc-viewer-grid">
+                    <div class="theory-card">
+                        <h3 class="section-h3"><i class="fa-solid fa-book"></i> Điểm Phân Biệt & Lưu Ý Nghiệp Vụ</h3>
+                        <p class="theory-p">Khác với Hóa đơn thương mại, Packing List <strong>không thể hiện giá tiền</strong>, chỉ tập trung vào các thông số hàng hóa thực tế.</p>
+                        
+                        <ul class="theory-list">
+                            <li><strong>Gross Weight (G.W) - Trọng lượng cả bì:</strong> Bao gồm hàng + bao bì + pallet. Dùng đối chiếu B/L và tính cước vận chuyển.</li>
+                            <li><strong>Net Weight (N.W) - Trọng lượng tịnh:</strong> Trọng lượng thực của hàng hóa.</li>
+                            <li><strong>Số lượng kiện (Packages):</strong> Căn cứ để cán bộ Hải quan chọn mẫu kiểm hóa thực tế khi kiểm tra Luồng Đỏ.</li>
+                        </ul>
+
+                        <div class="alert-box">
+                            <strong>Cảnh báo lệch N.W / G.W:</strong> Nếu G.W trên B/L ghi 675 kg nhưng Packing List ghi 900 kg, Hải quan sẽ ngay lập tức nghi ngờ khai báo gian lận hoặc ngụy trang hàng cấm!
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="paper-document">
+                            <div class="paper-header">PACKING LIST</div>
+                            <div class="paper-row">
+                                <div><strong>EXPORTER:</strong> ABC ELECTRONICS CO., LTD</div>
+                                <div><strong>CONSIGNEE:</strong> VIET TECH IMPORT EXPORT CO., LTD</div>
+                            </div>
+                            <br>
+                            <table class="paper-table">
+                                <thead>
+                                    <tr>
+                                        <th>Carton No</th>
+                                        <th>Description</th>
+                                        <th>Qty</th>
+                                        <th>N.W (Kgs)</th>
+                                        <th>G.W (Kgs)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1 – 10</td>
+                                        <td>Wireless Mouse M202</td>
+                                        <td>1,000 pcs</td>
+                                        <td>120.0</td>
+                                        <td>135.0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>11 – 50</td>
+                                        <td>Wireless Mouse M202</td>
+                                        <td>4,000 pcs</td>
+                                        <td>480.0</td>
+                                        <td>540.0</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br>
+                            <div class="paper-row">
+                                <div><strong>TOTAL PACKAGES:</strong></div>
+                                <div><span class="hotspot" onclick="showTip(this, 'SỐ KIỆN: 50 Thùng Carton (Cartons).')">50 Cartons</span></div>
+                            </div>
+                            <div class="paper-row">
+                                <div><strong>TOTAL NET WEIGHT:</strong></div>
+                                <div><span class="hotspot" onclick="showTip(this, 'TRỌNG LƯỢNG TỊNH: 600 Kgs.')">600.00 Kgs</span></div>
+                            </div>
+                            <div class="paper-row">
+                                <div><strong>TOTAL GROSS WEIGHT:</strong></div>
+                                <div><span class="hotspot" onclick="showTip(this, 'TRỌNG LƯỢNG CẢ BÌ: 675 Kgs - Phải khớp chính xác với Vận đơn B/L.')">675.00 Kgs</span></div>
+                            </div>
+                            <div><strong>PACKING DETAIL:</strong> Cartons packed on wood pallets.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 5: BILL OF LADING -->
+            <div id="tab-bol" class="tab-content">
+                <div class="module-header">
+                    <div>
+                        <h2 class="module-title">2.4 Vận Đơn Vận Tải (Bill of Lading - B/L)</h2>
+                        <p class="module-desc">Chứng từ vận tải, biên nhận giao hàng và chứng từ sở hữu hàng hóa</p>
+                    </div>
+                    <i class="fa-solid fa-ship fa-2xl" style="color: var(--primary-blue);"></i>
+                </div>
+
+                <div class="doc-viewer-grid">
+                    <div class="theory-card">
+                        <h3 class="section-h3"><i class="fa-solid fa-book"></i> Phân Loại Vận Đơn Trong Thực Tế</h3>
+                        <p class="theory-p">Vận đơn xác nhận Hãng tàu/Forwarder đã nhận hàng để vận chuyển từ Cảng đi đến Cảng đích.</p>
+
+                        <div style="font-size: 0.88rem; line-height: 1.5;">
+                            <div style="margin-bottom: 6px;">• <strong>Master B/L (MBL):</strong> Do Hãng tàu cấp cho Forwarder.</div>
+                            <div style="margin-bottom: 6px;">• <strong>House B/L (HBL):</strong> Do Forwarder cấp cho Chủ hàng thực tế (Shipper/Consignee).</div>
+                            <div style="margin-bottom: 6px;">• <strong>Original B/L:</strong> Vận đơn gốc, có quyền sở hữu, phải nộp để lấy lệnh D/O.</div>
+                            <div style="margin-bottom: 6px;">• <strong>Telex Release / Sea Waybill:</strong> Giải phóng hàng điện tử, nhận hàng không cần nộp B/L gốc.</div>
+                        </div>
+
+                        <div class="alert-box">
+                            <strong>Lưu ý khai tờ khai HQ:</strong> Nếu đi qua Forwarder sử dụng House Bill, doanh nghiệp BẮT BUỘC phải khai báo số House Bill (HBL) trên tờ khai hải quan.
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="paper-document">
+                            <div class="paper-header">OCEAN BILL OF LADING</div>
+                            <div class="paper-row">
+                                <div><strong>CARRIER:</strong> HMM Shipping Line</div>
+                                <div><strong>B/L NO:</strong> <span class="hotspot" onclick="showTip(this, 'SỐ VẬN ĐƠN: Mã định danh duy nhất của lô hàng để tra cứu thông tin Hải quan.')">HMMU202603158</span></div>
+                            </div>
+                            <br>
+                            <div><strong>SHIPPER:</strong> ABC ELECTRONICS CO., LTD, Shenzhen, China</div>
+                            <div><strong>CONSIGNEE:</strong> VIET TECH IMPORT EXPORT CO., LTD, HCMC, Vietnam</div>
+                            <div><strong>NOTIFY PARTY:</strong> VIET TECH IMPORT EXPORT CO., LTD</div>
+                            <br>
+                            <div class="paper-row">
+                                <div><strong>PORT OF LOADING:</strong> <span class="hotspot" onclick="showTip(this, 'CẢNG XẾP HÀNG: Shanghai/Shenzhen, China.')">Shanghai, China</span></div>
+                                <div><strong>PORT OF DISCHARGE:</strong> <span class="hotspot" onclick="showTip(this, 'CẢNG DỠ HÀNG: Cát Lái, TPHCM, Việt Nam.')">Cat Lai, Ho Chi Minh</span></div>
+                            </div>
+                            <br>
+                            <div><strong>CONTAINER / SEAL NO:</strong> <span class="hotspot" onclick="showTip(this, 'SỐ CONT/SEAL: Khai chính xác để Hải quan giám sát cổng cảng.')">TGHU4567890 / SEAL SL12345</span></div>
+                            <div><strong>DESCRIPTION:</strong> Wireless Optical Mouse Model M202</div>
+                            <div><strong>PACKAGES:</strong> 50 Cartons</div>
+                            <div><strong>GROSS WEIGHT:</strong> 675.00 Kgs</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 6: CERTIFICATE OF ORIGIN -->
+            <div id="tab-co" class="tab-content">
+                <div class="module-header">
+                    <div>
+                        <h2 class="module-title">2.5 Chứng Nhận Xuất Xứ Hàng Hóa (C/O)</h2>
+                        <p class="module-desc">Chìa khóa hưởng Thuế suất Ưu đãi Đặc biệt (0% - 5%)</p>
+                    </div>
+                    <i class="fa-solid fa-certificate fa-2xl" style="color: var(--bright-red);"></i>
+                </div>
+
+                <div class="doc-viewer-grid">
+                    <div class="theory-card">
+                        <h3 class="section-h3"><i class="fa-solid fa-book"></i> Đọc & Kiểm Tra Các Ô Trên C/O (Boxes)</h3>
+                        <p class="theory-p">C/O do cơ quan thẩm quyền nước xuất khẩu cấp. Bất kỳ sai sót nhỏ nào cũng dẫn đến từ chối ưu đãi thuế!</p>
+
+                        <div style="font-size: 0.85rem; line-height: 1.5;">
+                            <div>• <strong>Box 1 (Exporter):</strong> Tên/địa chỉ người xuất khẩu.</div>
+                            <div>• <strong>Box 2 (Consignee):</strong> Tên/địa chỉ người nhập khẩu.</div>
+                            <div>• <strong>Box 7 (Description):</strong> Mô tả hàng hóa & Mã HS.</div>
+                            <div>• <strong>Box 8 (Origin Criterion):</strong> Tiêu chí xuất xứ (WO, CTH, RVC...).</div>
+                            <div>• <strong>Box 10 (Invoice):</strong> Số và ngày Hóa đơn thương mại.</div>
+                            <div>• <strong>Box 11 & 12:</strong> Chữ ký, con dấu cơ quan cấp C/O.</div>
+                        </div>
+
+                        <div class="alert-box">
+                            <strong>Các Mầu Form C/O Phổ Biến:</strong><br>
+                            • <strong>Form E:</strong> ASEAN - Trung Quốc (ACFTA)<br>
+                            • <strong>Form D:</strong> Khối ASEAN (ATIGA)<br>
+                            • <strong>Form AK:</strong> ASEAN - Hàn Quốc (AKFTA)
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="paper-document">
+                            <div class="paper-header" style="border-bottom-color: red; color: red;">CERTIFICATE OF ORIGIN (FORM E)</div>
+                            <div><strong>BOX 1 (Exporter):</strong> ABC ELECTRONICS CO., LTD, China</div>
+                            <div><strong>BOX 2 (Consignee):</strong> VIET TECH IMPORT EXPORT CO., LTD, Vietnam</div>
+                            <div><strong>BOX 3 (Transport):</strong> By Sea, Vessel HMM GREEN from Shanghai to Cat Lai</div>
+                            <br>
+                            <table class="paper-table">
+                                <thead>
+                                    <tr>
+                                        <th>Box 7 (Description)</th>
+                                        <th>Box 8 (Criterion)</th>
+                                        <th>Box 9 (G.W)</th>
+                                        <th>Box 10 (Invoice)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Wireless Optical Mouse Model M202 (HS: 8471.60)</td>
+                                        <td><span class="hotspot" onclick="showTip(this, 'TIÊU CHÍ XUẤT XỨ: CTH (Change in Tariff Heading - Chuyển đổi mã HS cấp 4 số).')">CTH</span></td>
+                                        <td>675 Kgs</td>
+                                        <td><span class="hotspot" onclick="showTip(this, 'SỐ INVOICE TRÊN C/O: Khớp với Invoice INV2026-015 ngày 15/03/2026.')">INV2026-015</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br>
+                            <div class="paper-row">
+                                <div><strong>BOX 11:</strong> Exporter Declaration</div>
+                                <div><strong>BOX 12:</strong> <span class="hotspot" onclick="showTip(this, 'MẤU CHỐT: Phải có chữ ký cán bộ cấp & Con dấu hợp lệ của cơ quan thẩm quyền (CCPIT).')">CCPIT Official Stamp & Signature</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 7: ARRIVAL NOTICE -->
+            <div id="tab-arrival" class="tab-content">
+                <div class="module-header">
+                    <div>
+                        <h2 class="module-title">2.6 Thông Báo Hàng Đến (Arrival Notice)</h2>
+                        <p class="module-desc">Thông tin lịch trình hàng đến, chi phí Local Charges và thời hạn Free Time</p>
+                    </div>
+                    <i class="fa-solid fa-bell fa-2xl" style="color: var(--primary-blue);"></i>
+                </div>
+
+                <div class="doc-viewer-grid">
+                    <div class="theory-card">
+                        <h3 class="section-h3"><i class="fa-solid fa-book"></i> Nghiệp Vụ Chuẩn Bị Nhận Hàng</h3>
+                        <p class="theory-p">Hãng tàu gửi Arrival Notice cho Consignee trước khi tàu cập cảng 1-3 ngày.</p>
+
+                        <ul class="theory-list">
+                            <li>Xác định chính xác ngày hàng đến <strong>ETA (Estimated Time of Arrival)</strong> để truyền tờ khai HQ đúng thời điểm.</li>
+                            <li>Biết rõ thời gian <strong>Free Time (Miễn lưu cont/bãi)</strong>. Quá thời gian này sẽ phát sinh phí Demurrage/Detention rất đắt.</li>
+                            <li>Chuẩn bị tiền thanh toán phí địa phương (Local Charges): Phí D/O, THC, vệ sinh container...</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <div class="paper-document">
+                            <div class="paper-header">ARRIVAL NOTICE / NOTICE OF ARRIVAL</div>
+                            <div><strong>CARRIER:</strong> HMM Shipping Line</div>
+                            <div><strong>VESSEL / VOYAGE:</strong> HMM GREEN / 023E</div>
+                            <div><strong>ETA:</strong> <span class="hotspot" onclick="showTip(this, 'ETA: Ngày 15/03/2026 - Ngày tàu cập cảng dự kiến.')">15 March 2026</span></div>
+                            <div><strong>PORT OF DISCHARGE:</strong> Cat Lai Port, Ho Chi Minh City</div>
+                            <div><strong>B/L NO:</strong> HMMU202603158</div>
+                            <br>
+                            <div><strong>CONTAINER NO:</strong> TGHU4567890 (1x20' GP)</div>
+                            <div><strong>FREE TIME:</strong> <span class="hotspot" onclick="showTip(this, 'FREE TIME: 5 ngày miễn phí lưu cont tại bãi cảng. Cần thông quan lấy hàng gấp!')">5 Days</span></div>
+                            <br>
+                            <div><strong>LOCAL CHARGES TO BE PAID:</strong></div>
+                            <ul style="padding-left: 1.2rem;">
+                                <li>D/O Fee: 900,000 VND</li>
+                                <li>THC Fee: 2,600,000 VND</li>
+                                <li>Cleaning Fee: 400,000 VND</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 8 (MỚI BỔ SUNG): PHIẾU GOM DỮ LIỆU TỜ KHAI HẢI QUAN -->
+            <div id="tab-ecus-sheet" class="tab-content">
+                <div class="module-header" style="border-left-color: #10b981;">
+                    <div>
+                        <h2 class="module-title">8. PHIẾU GOM DỮ LIỆU TỜ KHAI HẢI QUAN NHẬP KHẨU</h2>
+                        <p class="module-desc">Sử dụng chuẩn bị dữ liệu nhập liệu trước khi nhập vào phần mềm ECUS5-VNACCS</p>
+                    </div>
+                    <button class="btn btn-success" onclick="exportEcusSheetPDF()">
+                        <i class="fa-solid fa-file-pdf"></i> Xuất File PDF A4
+                    </button>
+                </div>
+
+                <div class="ecus-form-card">
+                    <!-- Thông tin Sinh viên thực hiện -->
+                    <div style="background-color: var(--bg-light-blue); padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label><i class="fa-solid fa-user-graduate"></i> Họ tên Sinh viên thực hiện:</label>
+                            <input type="text" id="ecus-sv-name" class="form-control" placeholder="Nhập họ tên sinh viên...">
+                        </div>
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label><i class="fa-solid fa-id-card"></i> Mã số sinh viên (MSSV):</label>
+                            <input type="text" id="ecus-sv-id" class="form-control" placeholder="Nhập MSSV...">
+                        </div>
+                    </div>
+
+                    <!-- 1. Thông tin Chung -->
+                    <div class="ecus-section-title"><i class="fa-solid fa-circle-info"></i> 1. Thông tin Chung (General Information)</div>
+                    <div class="ecus-grid">
+                        <div class="form-group">
+                            <label>Mã Loại hình nhập khẩu:</label>
+                            <input type="text" id="ecus-lh" class="form-control" placeholder="Ví dụ: A11, A12, A41...">
+                        </div>
+                        <div class="form-group">
+                            <label>Mã Cơ quan Hải quan tiếp nhận:</label>
+                            <input type="text" id="ecus-cqhq" class="form-control" placeholder="Ví dụ: 02CI, 02IK...">
+                        </div>
+                        <div class="form-group">
+                            <label>Tên/Mã Người nhập khẩu:</label>
+                            <input type="text" id="ecus-importer" class="form-control" placeholder="Tên công ty / Mã số thuế người nhập khẩu">
+                        </div>
+                        <div class="form-group">
+                            <label>Tên/Mã Người xuất khẩu:</label>
+                            <input type="text" id="ecus-exporter" class="form-control" placeholder="Tên / Địa chỉ công ty xuất khẩu">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <label>Mã Địa điểm lưu kho hàng chờ thông quan dự kiến:</label>
+                        <input type="text" id="ecus-kho" class="form-control" placeholder="Ví dụ: 02CIR01 - Cảng Cát Lái...">
+                    </div>
+
+                    <!-- 2. Thông tin Vận chuyển -->
+                    <div class="ecus-section-title"><i class="fa-solid fa-truck-fast"></i> 2. Thông tin Vận chuyển (Transport Information)</div>
+                    <div class="ecus-grid">
+                        <div class="form-group">
+                            <label>Tên tàu & Số chuyến:</label>
+                            <input type="text" id="ecus-vessel" class="form-control" placeholder="Ví dụ: HMM GREEN / 023E">
+                        </div>
+                        <div class="form-group">
+                            <label>Số Vận đơn (B/L) & Ngày B/L:</label>
+                            <input type="text" id="ecus-bl" class="form-control" placeholder="Ví dụ: HMMU202603158 - Ngày 12/03/2026">
+                        </div>
+                        <div class="form-group">
+                            <label>Mã Cảng xếp hàng (POL):</label>
+                            <input type="text" id="ecus-pol" class="form-control" placeholder="Ví dụ: CNSHA">
+                        </div>
+                        <div class="form-group">
+                            <label>Mã Cảng dỡ hàng (POD):</label>
+                            <input type="text" id="ecus-pod" class="form-control" placeholder="Ví dụ: VNSGN">
+                        </div>
+                        <div class="form-group">
+                            <label>Tổng số lượng kiện & Loại kiện:</label>
+                            <input type="text" id="ecus-packages" class="form-control" placeholder="Ví dụ: 50 Cartons">
+                        </div>
+                        <div class="form-group">
+                            <label>Tổng trọng lượng (Gross Weight) & Đơn vị:</label>
+                            <input type="text" id="ecus-gw" class="form-control" placeholder="Ví dụ: 675 KGS">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <label>Số lượng Container & Số Cont/Seal:</label>
+                        <input type="text" id="ecus-cont" class="form-control" placeholder="Ví dụ: 1x20GP - TGHU4567890 / SEAL SL12345">
+                    </div>
+
+                    <!-- 3. Thông tin Hóa đơn & Trị giá -->
+                    <div class="ecus-section-title"><i class="fa-solid fa-receipt"></i> 3. Thông tin Hóa đơn & Trị giá (Invoice & Valuation)</div>
+                    <div class="ecus-grid">
+                        <div class="form-group">
+                            <label>Số Hóa đơn & Ngày Hóa đơn:</label>
+                            <input type="text" id="ecus-inv-no" class="form-control" placeholder="Ví dụ: INV2026-015 - Ngày 15/03/2026">
+                        </div>
+                        <div class="form-group">
+                            <label>Phương thức thanh toán:</label>
+                            <input type="text" id="ecus-payment" class="form-control" placeholder="Ví dụ: T/T, L/C, D/P">
+                        </div>
+                        <div class="form-group">
+                            <label>Điều kiện giá hóa đơn (Incoterms):</label>
+                            <input type="text" id="ecus-incoterm" class="form-control" placeholder="Ví dụ: FOB, CIF, EXW...">
+                        </div>
+                        <div class="form-group">
+                            <label>Đồng tiền thanh toán (Currency):</label>
+                            <input type="text" id="ecus-curr" class="form-control" value="USD">
+                        </div>
+                        <div class="form-group">
+                            <label>Tổng trị giá hóa đơn (Invoice Value):</label>
+                            <input type="number" id="ecus-total-inv" class="form-control" value="90000" oninput="autoDistributeCharges()">
+                        </div>
+                        <div class="form-group">
+                            <label>Chi phí Vận tải (Ocean Freight - F):</label>
+                            <input type="number" id="ecus-total-f" class="form-control" value="1200" oninput="autoDistributeCharges()">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <label>Chi phí Bảo hiểm (Insurance - I):</label>
+                        <input type="number" id="ecus-total-i" class="form-control" value="100" oninput="autoDistributeCharges()">
+                    </div>
+
+                    <!-- 4. Danh mục Chi tiết Hàng hóa -->
+                    <div class="ecus-section-title"><i class="fa-solid fa-list-check"></i> 4. Danh mục Chi tiết Hàng hóa (Item Details)</div>
+                    
+                    <div style="overflow-x: auto;">
+                        <table class="ecus-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px;">STT</th>
+                                    <th>Tên hàng (Tiếng Việt)</th>
+                                    <th style="width: 100px;">Mã HS</th>
+                                    <th style="width: 70px;">Số lượng</th>
+                                    <th style="width: 70px;">ĐVT</th>
+                                    <th style="width: 90px;">Đơn giá (USD)</th>
+                                    <th style="width: 110px;">Trị giá FOB (USD)</th>
+                                    <th style="width: 110px;">Phí F phân bổ</th>
+                                    <th style="width: 110px;">Phí I phân bổ</th>
+                                    <th style="width: 120px;">Trị giá CIF (USD)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td><input type="text" id="item-name-1" class="form-control" placeholder="Tên mặt hàng 1"></td>
+                                    <td><input type="text" id="item-hs-1" class="form-control" placeholder="Mã HS"></td>
+                                    <td><input type="number" id="item-qty-1" class="form-control" placeholder="Số lượng" oninput="calcRowVal(1)"></td>
+                                    <td><input type="text" id="item-unit-1" class="form-control" placeholder="Pcs/Kgs"></td>
+                                    <td><input type="number" id="item-price-1" class="form-control" placeholder="Đơn giá" oninput="calcRowVal(1)"></td>
+                                    <td><input type="number" id="item-fob-1" class="form-control read-only-calc" value="0" readonly></td>
+                                    <td><input type="number" id="item-f-1" class="form-control read-only-calc" value="0" readonly></td>
+                                    <td><input type="number" id="item-i-1" class="form-control read-only-calc" value="0" readonly></td>
+                                    <td><input type="number" id="item-cif-1" class="form-control read-only-calc" value="0" readonly></td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td><input type="text" id="item-name-2" class="form-control" placeholder="Tên mặt hàng 2"></td>
+                                    <td><input type="text" id="item-hs-2" class="form-control" placeholder="Mã HS"></td>
+                                    <td><input type="number" id="item-qty-2" class="form-control" placeholder="Số lượng" oninput="calcRowVal(2)"></td>
+                                    <td><input type="text" id="item-unit-2" class="form-control" placeholder="Pcs/Kgs"></td>
+                                    <td><input type="number" id="item-price-2" class="form-control" placeholder="Đơn giá" oninput="calcRowVal(2)"></td>
+                                    <td><input type="number" id="item-fob-2" class="form-control read-only-calc" value="0" readonly></td>
+                                    <td><input type="number" id="item-f-2" class="form-control read-only-calc" value="0" readonly></td>
+                                    <td><input type="number" id="item-i-2" class="form-control read-only-calc" value="0" readonly></td>
+                                    <td><input type="number" id="item-cif-2" class="form-control read-only-calc" value="0" readonly></td>
+                                </tr>
+                                <tr style="font-weight: bold; background-color: #f8fafc;">
+                                    <td colspan="6" style="text-align: right; padding-right: 10px;">CỘNG:</td>
+                                    <td><span id="sum-fob">0</span> USD</td>
+                                    <td><span id="sum-f">0</span> USD</td>
+                                    <td><span id="sum-i">0</span> USD</td>
+                                    <td><span id="sum-cif" style="color: var(--bright-red);">0</span> USD</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="note-box" style="margin-top: 1rem;">
+                        <strong><i class="fa-solid fa-calculator"></i> Gợi ý công thức phân bổ phí F và I cho từng dòng hàng:</strong><br>
+                        <code>Phí phân bổ dòng X = Tổng chi phí (F hoặc I) x ( Trị giá FOB dòng X : Tổng trị giá FOB lô hàng)</code>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB EXERCISES & PRACTICE QUESTIONS -->
+            <div id="tab-exercises" class="tab-content">
+                <div class="module-header">
+                    <div>
+                        <h2 class="module-title">Câu Hỏi Ôn Tập & Bài Tập Thực Hành Chứng Từ</h2>
+                        <p class="module-desc">Hệ thống câu hỏi lý thuyết và bài tập tình huống thực tế có hướng dẫn chi tiết</p>
+                    </div>
+                    <i class="fa-solid fa-pen-to-square fa-2xl" style="color: var(--bright-red);"></i>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    
+                    <!-- SECTION A: THEORETICAL QUESTIONS -->
+                    <div class="theory-card">
+                        <h3 class="section-h3" style="color: var(--dark-blue);">
+                            <i class="fa-solid fa-clipboard-question"></i> PHẦN 1: CÂU HỎI ÔN TẬP LÝ THUYẾT (12 CÂU)
+                        </h3>
+                        <p class="theory-p">Nhấp vào từng câu hỏi để xem gợi ý đáp án chi tiết phục vụ cho việc ôn tập:</p>
+
+                        <!-- Q1 -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>1. Khái niệm và vai trò của chứng từ hải quan trong hoạt động XNK?</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                <strong>Khái niệm:</strong> Chứng từ hải quan là bộ văn bản, chứng nhận do các bên liên quan (người bán, người mua, người vận chuyển, cơ quan thẩm quyền...) phát hành nhằm chứng minh tính hợp pháp, nguồn gốc, giá trị và thông số kỹ thuật của lô hàng.<br>
+                                <strong>Vai trò:</strong> Căn cứ để người khai hải quan thực hiện khai báo; căn cứ để cơ quan hải quan kiểm tra, phân luồng (Xanh/Vàng/Đỏ), xác định nghĩa vụ thuế và quyết định thông quan.
+                            </div>
+                        </div>
+
+                        <!-- Q2 -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>2. Hợp đồng ngoại thương là gì? Các nội dung cơ bản trong hợp đồng?</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                <strong>Khái niệm:</strong> Thỏa thuận pháp lý giữa bên mua và bên bán ở hai quốc gia khác nhau về quyền và nghĩa vụ trong mua bán hàng hóa.<br>
+                                <strong>Nội dung cơ bản:</strong> Thông tin các bên (Seller/Buyer), Tên hàng (Commodity), Số lượng (Quantity), Đơn giá & Tổng giá trị (Price & Total amount), Điều kiện giao hàng (Incoterms), Phương thức thanh toán (Payment term), Thời gian/Địa điểm giao hàng (Shipment).
+                            </div>
+                        </div>
+
+                        <!-- Q3 -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>3. Khái niệm và vai trò của Hóa đơn thương mại (Commercial Invoice) trong khai báo hải quan?</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                <strong>Khái niệm:</strong> Chứng từ do người bán lập yêu cầu người mua thanh toán tiền hàng theo thỏa thuận hợp đồng.<br>
+                                <strong>Vai trò hải quan:</strong> Căn cứ cốt lõi xác định trị giá giao dịch (Trị giá Hải quan), tính toán các khoản thuế payable (Thuế NK, Thuế VAT, Thuế TTĐB...) và quy đổi tỷ giá.
+                            </div>
+                        </div>
+
+                        <!-- Q4 -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>4. Thông tin cơ bản trên Packing List và ý nghĩa trong kiểm tra hàng hóa?</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                <strong>Thông tin cơ bản:</strong> Số thùng/kiện (Total packages), Trọng lượng tịnh (Net Weight - NW), Trọng lượng cả bì (Gross Weight - GW), Kích thước/Thể tích (CBM), Quy cách đóng gói.<br>
+                                <strong>Ý nghĩa kiểm hóa:</strong> Giúp cán bộ kiểm hóa Hải quan biết chính xác hàng nằm ở vị trí/thùng nào để chọn mẫu kiểm tra thực tế (khi bị luồng Đỏ).
+                            </div>
+                        </div>
+
+                        <!-- Q5 -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>5. Vận đơn là gì? Các chức năng cơ bản của vận đơn trong vận tải quốc tế?</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                <strong>Khái niệm:</strong> Chứng từ vận tải do người vận chuyển (Hãng tàu/Forwarder) cấp cho người gửi hàng.<br>
+                                <strong>3 Chức năng cơ bản:</strong> Biên nhận hoàn thành việc nhận hàng để vận chuyển; Bằng chứng của hợp đồng vận tải biển; Chứng từ sở hữu hàng hóa (đối với vận đơn gốc B/L).
+                            </div>
+                        </div>
+
+                        <!-- Q6 -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>6. Phân biệt Vận đơn đường biển (B/L) và Vận đơn hàng không (AWB)?</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                <strong>B/L (Sea):</strong> Có chức năng chứng từ sở hữu hàng hóa (có thể chuyển nhượng/định đoạt bằng ký hậu); phát hành theo bộ 3 bản gốc.<br>
+                                <strong>AWB (Air):</strong> KHÔNG phải chứng từ sở hữu hàng hóa (không chuyển nhượng được), chỉ là biên nhận giao hàng và hợp đồng vận chuyển; phát hành theo bộ nhiều bản cho các bên.
+                            </div>
+                        </div>
+
+                        <!-- Q7 -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>7. Khái niệm và mục đích sử dụng Chứng nhận xuất xứ (C/O)?</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                <strong>Khái niệm:</strong> Văn bản do cơ quan có thẩm quyền nước xuất khẩu cấp để xác nhận nguồn gốc sản xuất/chế tạo của hàng hóa.<br>
+                                <strong>Mục đích:</strong> Áp dụng thuế suất ưu đãi đặc biệt (FTA), thực hiện chống phá giá/chống lẩn tránh thuế, quản lý ngạch nhập khẩu và thống kê thương mại.
+                            </div>
+                        </div>
+
+                        <!-- Q8 -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>8. Nêu một số loại C/O phổ biến và Hiệp định thương mại tương ứng?</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                • <strong>Form E:</strong> Hiệp định ACFTA (ASEAN - Trung Quốc)<br>
+                                • <strong>Form D:</strong> Hiệp định ATIGA (Khối ASEAN)<br>
+                                • <strong>Form AK:</strong> Hiệp định AKFTA (ASEAN - Hàn Quốc)<br>
+                                • <strong>Form EUR.1:</strong> Hiệp định EVFTA (Việt Nam - EU)<br>
+                                • <strong>Form CPTPP:</strong> Hiệp định Đối tác Toàn diện và Tiến bộ xuyên Thái Bình Dương.
+                            </div>
+                        </div>
+
+                        <!-- Q9 -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>9. Vì sao C/O có vai trò quan trọng trong việc hưởng ưu đãi thuế quan?</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                C/O hợp lệ là căn cứ duy nhất để Hải quan cho phép áp dụng mức Thuế suất Ưu đãi Đặc biệt (thường từ 0% - 5%) thay vì Thuế suất MFN (Ưu đãi thông thường). Giúp cắt giảm tối đa chi phí thuế cho doanh nghiệp nhập khẩu.
+                            </div>
+                        </div>
+
+                        <!-- Q10 -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>10. Arrival Notice là gì? Vai trò trong nhận hàng và làm thủ tục hải quan?</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                <strong>Khái niệm:</strong> Thông báo do hãng tàu/forwarder gửi cho người nhận hàng (Consignee) khi hàng chuẩn bị cập cảng đích.<br>
+                                <strong>Vai trò:</strong> Cung cấp ETA (ngày hàng đến) để doanh nghiệp mở tờ khai đúng thời hạn; thông báo chi phí Local Charges, địa điểm giao nhận và số ngày miễn lưu container (Free Time).
+                            </div>
+                        </div>
+
+                        <!-- Q11 -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>11. Khi kiểm tra bộ chứng từ XNK, cần đối chiếu những nội dung nào?</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                • Tên/Địa chỉ Exporter, Importer (khớp trên Contract, Invoice, B/L, C/O).<br>
+                                • Mô tả hàng hóa, Mã HS Code, Số lượng/Trọng lượng (Invoice, Packing List, B/L).<br>
+                                • Điều kiện Incoterms, Giá cả, Số/Ngày Invoice (khớp trên Contract, Invoice, C/O).<br>
+                                • Số Cont/Seal, Cảng xếp/dỡ (B/L, Arrival Notice, C/O).
+                            </div>
+                        </div>
+
+                        <!-- Q12 -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>12. Nêu một số sai sót thường gặp trong bộ chứng từ và hậu quả?</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                <strong>Sai sót:</strong> Khác biệt tên hàng, lệch Gross Weight giữa P/L và B/L, sai số Invoice trên C/O, thiếu chữ ký/con dấu, khai sai điều kiện Incoterms.<br>
+                                <strong>Hậu quả:</strong> Tờ khai bị phân Luồng Đỏ, bị Bác C/O (mất ưu đãi thuế), chậm thông quan phát sinh phí lưu cont/bãi (Demurrage), bị xử phạt hành chính hải quan.
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- SECTION B: PRACTICAL EXERCISES -->
+                    <div class="theory-card" style="border-top-color: var(--bright-red);">
+                        <h3 class="section-h3" style="color: var(--bright-red);">
+                            <i class="fa-solid fa-vial"></i> PHẦN 2: BÀI TẬP THỰC HÀNH TÌNH HUỐNG (7 BÀI)
+                        </h3>
+
+                        <!-- EXERCISE 1 -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>Bài 1: Phân loại chứng từ theo vai trò nghiệp vụ</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                <strong>Đề bài:</strong> Bộ chứng từ gồm: Sales Contract, Invoice, Packing List, B/L, C/O. Yêu cầu xác định vai trò và chứng từ tương ứng cho các mục đích.<br><br>
+                                <strong>Gợi ý đáp án:</strong>
+                                <ul>
+                                    <li><strong>Xác định trị giá hải quan:</strong> Commercial Invoice (kèm Sales Contract).</li>
+                                    <li><strong>Xác định xuất xứ hàng hóa:</strong> Certificate of Origin (C/O).</li>
+                                    <li><strong>Kiểm tra số lượng kiện hàng:</strong> Packing List.</li>
+                                    <li><strong>Xác nhận việc vận chuyển hàng hóa:</strong> Bill of Lading (B/L).</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- EXERCISE 2 -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>Bài 2: Tính toán trị giá & điều kiện giao hàng FOB</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="exercise-data-card">
+                                    Seller: ABC ELECTRONICS CO., LTD – China<br>
+                                    Buyer: VIET TECH IMPORT EXPORT CO., LTD – Vietnam<br>
+                                    Invoice No: INV2026-0158 | Date: 15 March 2026<br>
+                                    Goods: Wireless Optical Mouse Model M202 | Qty: 5,000 pcs | Price: 3 USD/pc<br>
+                                    Terms: FOB Shanghai – Incoterms 2020
+                                </div>
+                                <strong>Gợi ý đáp án:</strong>
+                                <ul>
+                                    <li><strong>Tổng trị giá lô hàng:</strong> 5,000 pcs × 3 USD = <strong>15,000 USD</strong>.</li>
+                                    <li><strong>Điều kiện giao hàng:</strong> FOB Shanghai (Free on Board - Giao lên tàu tại cảng Shanghai).</li>
+                                    <li><strong>Ảnh hưởng Trị giá HQ:</strong> Vì giá Invoice mới là giá FOB (chưa có Freight & Insurance), khi xác định Trị giá Hải quan (giá CIF) để tính thuế, doanh nghiệp BẮT BUỘC phải cộng thêm cước vận tải biển (F) từ Shanghai về VN và phí bảo hiểm (I) nếu có.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- EXERCISE 3 -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>Bài 3: Phân tích các thông số trên Packing List</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="exercise-data-card">
+                                    Total Packages: 50 Cartons | Gross Weight: 675 kg | Net Weight: 600 kg<br>
+                                    Container No: TGHU4567890 | Seal No: SL12345
+                                </div>
+                                <strong>Gợi ý đáp án:</strong>
+                                <ul>
+                                    <li><strong>Phân biệt NW & GW:</strong> Net Weight (600 kg) là trọng lượng thuần của 5,000 con chuột. Gross Weight (675 kg) bao gồm NW cộng thêm trọng lượng vỏ thùng carton, băng keo, pallet gỗ (75 kg).</li>
+                                    <li><strong>Vai trò trong kiểm hóa:</strong> Giúp cán bộ Hải quan đối chiếu trọng lượng trung bình/thùng, mở đúng thùng carton cần kiểm tra thực tế.</li>
+                                    <li><strong>Thông tin đối chiếu B/L:</strong> Cần đối chiếu chính xác <strong>Gross Weight (675 kg), Total Packages (50 Cartons), Container No và Seal No</strong>.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- EXERCISE 4 -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>Bài 4: Phân tích thông số trên Vận đơn (Bill of Lading)</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="exercise-data-card">
+                                    B/L No: HMMU202603158<br>
+                                    Shipper: ABC ELECTRONICS CO., LTD – China<br>
+                                    Consignee: VIET TECH IMPORT EXPORT CO., LTD – Vietnam<br>
+                                    Port of Loading: Shanghai, China | Port of Discharge: Cat Lai Port – Ho Chi Minh City<br>
+                                    Packages: 50 Cartons
+                                </div>
+                                <strong>Gợi ý đáp án:</strong>
+                                <ul>
+                                    <li><strong>Người gửi / Nhận hàng:</strong> Shipper là ABC ELECTRONICS CO., LTD; Consignee là VIET TECH IMPORT EXPORT CO., LTD.</li>
+                                    <li><strong>Cảng đi / Cảng đến:</strong> Port of Loading (Cảng xếp): Shanghai, China; Port of Discharge (Cảng dỡ): Cat Lai Port, TPHCM.</li>
+                                    <li><strong>Số B/L dùng trong nghiệp vụ:</strong> Khai báo trên Tờ khai HQ điện tử; Tra cứu Manifest hải quan; Nộp cho hãng tàu lấy lệnh giao hàng D/O; Tra cứu vị trí container trên hệ thống cảng.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- EXERCISE 5 -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>Bài 5: Nghiệp vụ Chứng nhận Xuất xứ (C/O Form E)</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="exercise-data-card">
+                                    C/O Form E | Exporter: ABC Machinery Co., Ltd – China<br>
+                                    Consignee: VIET INDUSTRIAL EQUIPMENT CO., LTD – Vietnam<br>
+                                    Goods: Industrial CNC Machine | HS Code: 8458.11 | Origin Criterion: CTH
+                                </div>
+                                <strong>Gợi ý đáp án:</strong>
+                                <ul>
+                                    <li><strong>Loại C/O:</strong> C/O Form E (Chứng nhận xuất xứ mẫu E).</li>
+                                    <li><strong>Hiệp định áp dụng:</strong> Hiệp định Thương mại tự do ASEAN - Trung Quốc (ACFTA).</li>
+                                    <li><strong>Lợi ích về thuế:</strong> Được hưởng Thuế suất Ưu đãi Đặc biệt (ACFTA), thuế nhập khẩu giảm về <strong>0%</strong> (so với thuế MFN thông thường có thể từ 5% - 10%), tiết kiệm chi phí thuế rất lớn.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- EXERCISE 6 -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>Bài 6: Xử lý thông tin trên Notification of Arrival</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="exercise-data-card">
+                                    Vessel: HMM GREEN | ETA: 15 March 2026<br>
+                                    Port of Discharge: Cat Lai Port – Vietnam | B/L No: HMMU202603158<br>
+                                    Free Time: 5 days
+                                </div>
+                                <strong>Gợi ý đáp án:</strong>
+                                <ul>
+                                    <li><strong>Ý nghĩa ETA:</strong> Estimated Time of Arrival - Thời gian dự kiến tàu cập cảng (15/03/2026).</li>
+                                    <li><strong>Ý nghĩa Free Time:</strong> Thời gian hãng tàu cho phép miễn phí lưu container tại bãi cảng (5 ngày). Doanh nghiệp phải hoàn tất thủ tục thông quan và kéo cont về kho trong 5 ngày này.</li>
+                                    <li><strong>Chi phí phát sinh nếu trễ:</strong> Phí lưu container tại bãi (Demurrage) và Phí lưu vỏ container tại kho (Detention).</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- EXERCISE 7 -->
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>Bài 7: Quy trình Kiểm tra Chéo & Xử lý Bất đồng Dữ liệu</span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="exercise-data-card">
+                                    Invoice: 5,000 pcs | Packing List: 50 Cartons | B/L: 50 Cartons | Gross Weight: 675 kg
+                                </div>
+                                <strong>Gợi ý đáp án:</strong>
+                                <ul>
+                                    <li><strong>Nội dung cần đối chiếu chéo:</strong>
+                                        <br>- Invoice vs P/L: Tên hàng, Số lượng tổng (5,000 pcs).
+                                        <br>- P/L vs B/L: Số lượng kiện (50 Cartons), Tổng Gross Weight (675 kg), Số Cont/Seal.
+                                        <br>- Invoice vs B/L: Thông tin Shipper/Consignee, Cảng đi/đến.
+                                    </li>
+                                    <li><strong>Xử lý khi số kiện trên B/L khác Packing List:</strong>
+                                        <br>1. Ngừng khai tờ khai hải quan.
+                                        <br>2. Liên hệ ngay với Shipper và Hãng tàu/Forwarder để kiểm tra lại chứng từ gốc.
+                                        <br>3. Nếu do hãng tàu đánh máy sai -> Yêu cầu phát hành Biên bản sửa đổi vận đơn (Correction Notice/Amended B/L).
+                                        <br>4. Chỉ thực hiện truyền Tờ khai Hải quan khi tất cả thông số trên bộ chứng từ đã trùng khớp 100%.
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- TAB CALCULATOR TOOL -->
+            <div id="tab-calc" class="tab-content">
+                <div class="module-header">
+                    <div>
+                        <h2 class="module-title">Công Cụ Thực Hành: Tính Trị Giá Hải Quan & Thuế XNK</h2>
+                        <p class="module-desc">Mô phỏng quy đổi điều kiện FOB -> CIF và tính Thuế Nhập Khẩu, Thuế GTGT</p>
+                    </div>
+                    <i class="fa-solid fa-calculator fa-2xl" style="color: var(--bright-red);"></i>
+                </div>
+
+                <div class="doc-viewer-grid">
+                    <div class="calc-card">
+                        <h3 class="section-h3"><i class="fa-solid fa-sliders"></i> Nhập Thông Tin Chứng Từ</h3>
+                        
+                        <div class="form-group">
+                            <label>Giá hóa đơn (FOB) - USD:</label>
+                            <input type="number" id="calc-fob" class="form-control" value="17500">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Cước vận chuyển quốc tế Freight (F) - USD:</label>
+                            <input type="number" id="calc-freight" class="form-control" value="1200" placeholder="Nhập cước F">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Phí bảo hiểm quốc tế Insurance (I) - USD:</label>
+                            <input type="number" id="calc-insurance" class="form-control" value="150" placeholder="Nhập phí I">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Tỷ giá Hải Quan quy đổi (VND/USD):</label>
+                            <input type="number" id="calc-rate" class="form-control" value="25000">
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <div class="form-group">
+                                <label>Thuế suất NK (%):</label>
+                                <input type="number" id="calc-import-tax-rate" class="form-control" value="10">
+                            </div>
+                            <div class="form-group">
+                                <label>Có C/O Ưu Đãi (Form E/AK)?</label>
+                                <select id="calc-co-select" class="form-control" onchange="toggleCo()">
+                                    <option value="no">Không (Thuế MFN 10%)</option>
+                                    <option value="yes">Có (Thuế Ưu Đãi 0%)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="calculateCustoms()">
+                            <i class="fa-solid fa-calculator"></i> TÍNH TRỊ GIÁ HẢI QUAN & THUẾ
+                        </button>
+                    </div>
+
+                    <div class="calc-card" style="border-top-color: var(--yellow-accent);">
+                        <h3 class="section-h3" style="color: var(--yellow-accent);"><i class="fa-solid fa-receipt"></i> Kết Quả Bảng Tính Hải Quan</h3>
+                        
+                        <div class="calc-result-box">
+                            <div class="calc-result-item">
+                                <span>Trị giá FOB:</span>
+                                <span id="res-fob">$17,500.00</span>
+                            </div>
+                            <div class="calc-result-item">
+                                <span>Cước biển (F) + Bảo hiểm (I):</span>
+                                <span id="res-fi">$1,350.00</span>
+                            </div>
+                            <div class="calc-result-item">
+                                <span>Trị giá Hải quan (CIF = FOB + F + I):</span>
+                                <strong id="res-cif-usd" style="color: var(--primary-blue);">$18,850.00</strong>
+                            </div>
+                            <div class="calc-result-item">
+                                <span>Trị giá Tính Thuế (VND):</span>
+                                <strong id="res-cif-vnd" style="color: var(--primary-blue);">471,250,000 VND</strong>
+                            </div>
+                            <div class="calc-result-item">
+                                <span>Thuế Nhập Khẩu Bị Phải Nộp:</span>
+                                <span id="res-import-tax" style="color: var(--bright-red);">47,125,000 VND</span>
+                            </div>
+                            <div class="calc-result-item">
+                                <span>Thuế GTGT (VAT 10%):</span>
+                                <span id="res-vat-tax">51,837,500 VND</span>
+                            </div>
+                            <div class="calc-result-item">
+                                <span>TỔNG THUẾ PHẢI NỘP HẢI QUAN:</span>
+                                <span id="res-total-tax">98,962,500 VND</span>
+                            </div>
+                        </div>
+
+                        <div class="note-box" style="margin-top: 1rem;">
+                            <strong><i class="fa-solid fa-lightbulb"></i> Bài học cho Sinh viên:</strong> Nhờ có C/O hợp lệ, doanh nghiệp có thể đưa Thuế Nhập khẩu về 0 VND, tiết kiệm hàng chục triệu đồng chi phí!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB AUDIT / CROSS-CHECK PRACTICE -->
+            <div id="tab-audit" class="tab-content">
+                <div class="module-header">
+                    <div>
+                        <h2 class="module-title">Thực Hành: Kiểm Tra Chéo & Phát Hiện Sai Sót Chứng Từ</h2>
+                        <p class="module-desc">Tập làm Cán bộ Hải quan rà soát lỗi bất bất hợp lý giữa các chứng từ</p>
+                    </div>
+                    <i class="fa-solid fa-magnifying-glass-chart fa-2xl" style="color: var(--bright-red);"></i>
+                </div>
+
+                <div style="max-width: 800px; margin: 0 auto;">
+                    
+                    <!-- Question 1 -->
+                    <div class="audit-item">
+                        <div class="audit-question">
+                            <i class="fa-solid fa-circle-question" style="color: var(--bright-red);"></i> Tình huống 1: Hóa đơn (Commercial Invoice) ghi số lượng 5,000 pcs. Nhưng Phiếu đóng gói (Packing List) ghi 4,800 pcs. Cán bộ Hải quan nên xử lý thế nào?
+                        </div>
+                        <div class="audit-options">
+                            <button class="option-btn" onclick="checkAudit(this, false, 'q1')">A. Bỏ qua vì chênh lệch nhỏ, thông quan bình thường.</button>
+                            <button class="option-btn" onclick="checkAudit(this, true, 'q1')">B. Yêu cầu doanh nghiệp giải trình sai lệch, đưa lô hàng vào danh sách kiểm tra thực tế (Luồng Đỏ).</button>
+                            <button class="option-btn" onclick="checkAudit(this, false, 'q1')">C. Tự động sửa lại Hóa đơn cho bằng 4,800 pcs.</button>
+                        </div>
+                        <div id="q1-exp" class="explanation">
+                            <strong>Chính xác!</strong> Sự không thống nhất giữa Invoice và Packing List nghi ngờ khai sai số lượng trị giá hoặc giao thiếu hàng, Hải quan sẽ yêu cầu giải trình hoặc chuyển Luồng Đỏ kiểm hóa.
+                        </div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="audit-item">
+                        <div class="audit-question">
+                            <i class="fa-solid fa-circle-question" style="color: var(--bright-red);"></i> Tình huống 2: Hợp đồng ký giá FOB Shanghai 10,000 USD. Doanh nghiệp mở Tờ khai Hải quan nhập khẩu nhưng lại lấy đúng 10,000 USD làm Trị giá tính thuế mà không cộng cước F và bảo hiểm I. Tờ khai này bị lỗi gì?
+                        </div>
+                        <div class="audit-options">
+                            <button class="option-btn" onclick="checkAudit(this, false, 'q2')">A. Không có lỗi, khai đúng giá hợp đồng.</button>
+                            <button class="option-btn" onclick="checkAudit(this, true, 'q2')">B. Khai thiếu Trị giá Hải quan (Khai thiếu F + I), dẫn đến khai thiếu tiền thuế phải nộp, bị truy thu và phạt hành chính.</button>
+                            <button class="option-btn" onclick="checkAudit(this, false, 'q2')">C. Chỉ phạt nếu không nộp C/O.</button>
+                        </div>
+                        <div id="q2-exp" class="explanation">
+                            <strong>Chính xác!</strong> Trị giá Hải quan hàng nhập khẩu xác định theo giá CIF tại cửa khẩu nhập. Đi kiện FOB bắt buộc phải cộng Cước vận tải (F) và Bảo hiểm (I) vào Trị giá tính thuế!
+                        </div>
+                    </div>
+
+                    <!-- Question 3 -->
+                    <div class="audit-item">
+                        <div class="audit-question">
+                            <i class="fa-solid fa-circle-question" style="color: var(--bright-red);"></i> Tình huống 3: Trên chứng nhận xuất xứ C/O Form E, số Hóa đơn thương mại ghi "INV2025-999", nhưng Hóa đơn thực tế trong bộ hồ sơ hải quan lại là "INV2026-015". C/O này có hợp lệ không?
+                        </div>
+                        <div class="audit-options">
+                            <button class="option-btn" onclick="checkAudit(this, true, 'q3')">A. Không hợp lệ, bị từ chối hưởng Thuế ưu đãi đặc biệt 0% vì số Invoice không khớp.</button>
+                            <button class="option-btn" onclick="checkAudit(this, false, 'q3')">B. Vẫn hợp lệ vì tên hàng và số lượng đã giống nhau.</button>
+                        </div>
+                        <div id="q3-exp" class="explanation">
+                            <strong>Chính xác!</strong> Số Invoice trên C/O (Box 10) phải trùng khớp tuyệt đối với Commercial Invoice trong bộ hồ sơ. Sai lệch số Invoice sẽ khiến C/O bị bác bỏ.
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- TAB EXAM (30 BÀI TẬP LUYỆN TẬP + XUẤT PDF A4) -->
+            <div id="tab-exam" class="tab-content">
+                <div class="module-header" style="border-left-color: var(--bright-red);">
+                    <div>
+                        <h2 class="module-title">9. Hệ Thống 30 Bài Tập Luyện Tập & Kiểm Tra Chương</h2>
+                        <p class="module-desc">Sinh viên làm trực tiếp bài tập vào màn hình, sau đó kết xuất bài làm ra File PDF (A4 Ngang/Dọc) nộp cho Giảng viên.</p>
+                    </div>
+                    <i class="fa-solid fa-file-pen fa-2xl" style="color: var(--bright-red);"></i>
+                </div>
+
+                <!-- Thông tin Sinh viên -->
+                <div class="student-info-card">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label><i class="fa-solid fa-user"></i> Họ Và Tên Sinh Viên:</label>
+                        <input type="text" id="student-name" class="form-control" placeholder="Nhập đầy đủ họ tên...">
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label><i class="fa-solid fa-id-card"></i> Mã Số Sinh Viên (MSSV):</label>
+                        <input type="text" id="student-id" class="form-control" placeholder="Nhập MSSV...">
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-primary" onclick="exportPDF('portrait')">
+                            <i class="fa-solid fa-file-pdf"></i> Xuất PDF A4 Dọc
+                        </button>
+                        <button class="btn btn-success" onclick="exportPDF('landscape')">
+                            <i class="fa-solid fa-file-pdf"></i> Xuất PDF A4 Ngang
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Danh sách 30 Bài tập -->
+                <div id="exam-list">
+                    <!-- Javascript sẽ render 30 bài tập tại đây -->
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Container tạm dùng kết xuất PDF chuẩn format A4 -->
+    <div id="pdf-export-temp" style="display: none;"></div>
+
+    <!-- Tooltip Popover -->
+    <div id="tooltip" class="tooltip-popover"></div>
+
+    <script>
+        // TRẠNG THÁI GV PASS
+        let isGvLoggedIn = false;
+
+        // TỰ ĐỘNG PHÂN BỔ PHÍ F VÀ I CHO TAB PHIẾU GOM DỮ LIỆU
+        function calcRowVal(row) {
+            const qty = parseFloat(document.getElementById(`item-qty-${row}`).value) || 0;
+            const price = parseFloat(document.getElementById(`item-price-${row}`).value) || 0;
+            const fob = qty * price;
+            
+            document.getElementById(`item-fob-${row}`).value = fob;
+            autoDistributeCharges();
+        }
+
+        function autoDistributeCharges() {
+            const totalInv = parseFloat(document.getElementById('ecus-total-inv').value) || 0;
+            const totalF = parseFloat(document.getElementById('ecus-total-f').value) || 0;
+            const totalI = parseFloat(document.getElementById('ecus-total-i').value) || 0;
+
+            const fob1 = parseFloat(document.getElementById('item-fob-1').value) || 0;
+            const fob2 = parseFloat(document.getElementById('item-fob-2').value) || 0;
+            const sumFob = fob1 + fob2;
+
+            document.getElementById('sum-fob').innerText = sumFob.toLocaleString();
+
+            const calcBase = sumFob > 0 ? sumFob : totalInv;
+
+            if (calcBase > 0) {
+                // Phân bổ Dòng 1
+                const f1 = totalF * (fob1 / calcBase);
+                const i1 = totalI * (fob1 / calcBase);
+                const cif1 = fob1 + f1 + i1;
+
+                document.getElementById('item-f-1').value = f1.toFixed(2);
+                document.getElementById('item-i-1').value = i1.toFixed(2);
+                document.getElementById('item-cif-1').value = cif1.toFixed(2);
+
+                // Phân bổ Dòng 2
+                const f2 = totalF * (fob2 / calcBase);
+                const i2 = totalI * (fob2 / calcBase);
+                const cif2 = fob2 + f2 + i2;
+
+                document.getElementById('item-f-2').value = f2.toFixed(2);
+                document.getElementById('item-i-2').value = i2.toFixed(2);
+                document.getElementById('item-cif-2').value = cif2.toFixed(2);
+
+                // Tổng cộng
+                const sumF = f1 + f2;
+                const sumI = i1 + i2;
+                const sumCif = cif1 + cif2;
+
+                document.getElementById('sum-f').innerText = sumF.toFixed(2);
+                document.getElementById('sum-i').innerText = sumI.toFixed(2);
+                document.getElementById('sum-cif').innerText = sumCif.toFixed(2);
+            } else {
+                document.getElementById('sum-f').innerText = '0';
+                document.getElementById('sum-i').innerText = '0';
+                document.getElementById('sum-cif').innerText = '0';
+            }
+        }
+
+        // XUẤT FILE PDF TRANG A4 PHIẾU GOM DỮ LIỆU
+        function exportEcusSheetPDF() {
+            const svName = document.getElementById('ecus-sv-name').value.trim() || '...........................................';
+            const svId = document.getElementById('ecus-sv-id').value.trim() || '....................';
+
+            const tempDiv = document.getElementById('pdf-export-temp');
+            
+            let htmlContent = `
+                <div class="pdf-a4-page">
+                    <div style="text-align: center; font-weight: bold; font-size: 14pt; margin-bottom: 5px;">
+                        PHIẾU GOM DỮ LIỆU TỜ KHAI HẢI QUAN NHẬP KHẨU
+                    </div>
+                    <div style="text-align: center; font-style: italic; font-size: 10pt; margin-bottom: 15px;">
+                        (Sử dụng chuẩn bị dữ liệu trước khi nhập liệu ECUS5-VNACCS)
+                    </div>
+
+                    <div style="margin-bottom: 12px; font-size: 10.5pt;">
+                        <strong>Họ tên SV:</strong> ${svName} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>MSSV:</strong> ${svId}
+                    </div>
+
+                    <div style="font-weight: bold; margin-top: 10px; margin-bottom: 5px;">1. Thông tin Chung (General Information)</div>
+                    <div style="margin-left: 10px;">
+                        <div>• <strong>Mã Loại hình nhập khẩu:</strong> ${document.getElementById('ecus-lh').value || '....................................................'}</div>
+                        <div>• <strong>Mã Cơ quan Hải quan tiếp nhận:</strong> ${document.getElementById('ecus-cqhq').value || '....................................................'}</div>
+                        <div>• <strong>Tên/Mã Người nhập khẩu:</strong> ${document.getElementById('ecus-importer').value || '....................................................'}</div>
+                        <div>• <strong>Tên/Mã Người xuất khẩu:</strong> ${document.getElementById('ecus-exporter').value || '....................................................'}</div>
+                        <div>• <strong>Mã Địa điểm lưu kho hàng chờ thông quan dự kiến:</strong> ${document.getElementById('ecus-kho').value || '....................................................'}</div>
+                    </div>
+
+                    <div style="font-weight: bold; margin-top: 10px; margin-bottom: 5px;">2. Thông tin Vận chuyển (Transport Information)</div>
+                    <div style="margin-left: 10px;">
+                        <div>• <strong>Tên tàu & Số chuyến:</strong> ${document.getElementById('ecus-vessel').value || '....................................................'}</div>
+                        <div>• <strong>Số Vận đơn (B/L) & Ngày B/L:</strong> ${document.getElementById('ecus-bl').value || '....................................................'}</div>
+                        <div>• <strong>Mã Cảng xếp hàng (POL):</strong> ${document.getElementById('ecus-pol').value || '..............'} &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Mã Cảng dỡ hàng (POD):</strong> ${document.getElementById('ecus-pod').value || '..............'}</div>
+                        <div>• <strong>Tổng số lượng kiện & Loại kiện:</strong> ${document.getElementById('ecus-packages').value || '....................................................'}</div>
+                        <div>• <strong>Tổng trọng lượng (Gross Weight) & Đơn vị:</strong> ${document.getElementById('ecus-gw').value || '....................................................'}</div>
+                        <div>• <strong>Số lượng Container & Số Cont/Seal:</strong> ${document.getElementById('ecus-cont').value || '....................................................'}</div>
+                    </div>
+
+                    <div style="font-weight: bold; margin-top: 10px; margin-bottom: 5px;">3. Thông tin Hóa đơn & Trị giá (Invoice & Valuation)</div>
+                    <div style="margin-left: 10px;">
+                        <div>• <strong>Số Hóa đơn & Ngày Hóa đơn:</strong> ${document.getElementById('ecus-inv-no').value || '....................................................'}</div>
+                        <div>• <strong>Phương thức thanh toán:</strong> ${document.getElementById('ecus-payment').value || '....................................................'}</div>
+                        <div>• <strong>Điều kiện giá hóa đơn (Incoterms):</strong> ${document.getElementById('ecus-incoterm').value || '....................................................'}</div>
+                        <div>• <strong>Đồng tiền thanh toán (Currency):</strong> ${document.getElementById('ecus-curr').value || 'USD'}</div>
+                        <div>• <strong>Tổng trị giá hóa đơn (Invoice Value):</strong> ${document.getElementById('ecus-total-inv').value || '....................................................'}</div>
+                        <div>• <strong>Chi phí Vận tải (Ocean Freight - F):</strong> ${document.getElementById('ecus-total-f').value || '....................................................'}</div>
+                        <div>• <strong>Chi phí Bảo hiểm (Insurance - I):</strong> ${document.getElementById('ecus-total-i').value || '....................................................'}</div>
+                    </div>
+
+                    <div style="font-weight: bold; margin-top: 10px; margin-bottom: 5px;">4. Danh mục Chi tiết Hàng hóa (Item Details)</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 30px;">STT</th>
+                                <th>Tên hàng (Tiếng Việt)</th>
+                                <th>Mã HS</th>
+                                <th>Số lượng</th>
+                                <th>ĐVT</th>
+                                <th>Đơn giá</th>
+                                <th>Trị giá FOB</th>
+                                <th>Chi phí F phân bổ</th>
+                                <th>Chi phí I phân bổ</th>
+                                <th>Trị giá tính thuế CIF</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="text-align: center;">1</td>
+                                <td>${document.getElementById('item-name-1').value}</td>
+                                <td style="text-align: center;">${document.getElementById('item-hs-1').value}</td>
+                                <td style="text-align: center;">${document.getElementById('item-qty-1').value}</td>
+                                <td style="text-align: center;">${document.getElementById('item-unit-1').value}</td>
+                                <td style="text-align: right;">${document.getElementById('item-price-1').value}</td>
+                                <td style="text-align: right;">${document.getElementById('item-fob-1').value}</td>
+                                <td style="text-align: right;">${document.getElementById('item-f-1').value}</td>
+                                <td style="text-align: right;">${document.getElementById('item-i-1').value}</td>
+                                <td style="text-align: right;">${document.getElementById('item-cif-1').value}</td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center;">2</td>
+                                <td>${document.getElementById('item-name-2').value}</td>
+                                <td style="text-align: center;">${document.getElementById('item-hs-2').value}</td>
+                                <td style="text-align: center;">${document.getElementById('item-qty-2').value}</td>
+                                <td style="text-align: center;">${document.getElementById('item-unit-2').value}</td>
+                                <td style="text-align: right;">${document.getElementById('item-price-2').value}</td>
+                                <td style="text-align: right;">${document.getElementById('item-fob-2').value}</td>
+                                <td style="text-align: right;">${document.getElementById('item-f-2').value}</td>
+                                <td style="text-align: right;">${document.getElementById('item-i-2').value}</td>
+                                <td style="text-align: right;">${document.getElementById('item-cif-2').value}</td>
+                            </tr>
+                            <tr style="font-weight: bold; background-color: #f1f5f9;">
+                                <td colspan="6" style="text-align: center;">CỘNG</td>
+                                <td style="text-align: right;">${document.getElementById('sum-fob').innerText}</td>
+                                <td style="text-align: right;">${document.getElementById('sum-f').innerText}</td>
+                                <td style="text-align: right;">${document.getElementById('sum-i').innerText}</td>
+                                <td style="text-align: right;">${document.getElementById('sum-cif').innerText}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div style="margin-top: 20px; text-align: right; font-style: italic;">
+                        Ngày ....... tháng ....... năm 2026<br>
+                        <strong>Người lập phiếu</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br><br><br>
+                    </div>
+                </div>
+            `;
+
+            tempDiv.innerHTML = htmlContent;
+
+            const opt = {
+                margin:       [20, 20, 20, 20], // Lề Trái, Trên, Phải, Dưới chuẩn 2cm
+                filename:     `Phieu_Gom_Du_Lieu_To_Khai_${svId}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(tempDiv.children[0]).save().then(() => {
+                tempDiv.innerHTML = '';
+            });
+        }
+
+        // DỮ LIỆU 30 BÀI TẬP LUYỆN TẬP
+        const examQuestions = [
+            {
+                id: 1,
+                title: "Bài 1: Xác định chứng từ làm căn cứ xác định Trị giá Hải quan",
+                content: "Công ty A nhập khẩu lô hàng linh kiện điện tử từ Hàn Quốc. Chứng từ nào trong bộ hồ sơ hải quan có vai trò quyết định chính để xác định Trị giá Hải quan của lô hàng?",
+                answer: "Đáp án GV: Commercial Invoice (Hóa đơn thương mại) kết hợp với Hợp đồng ngoại thương (Sales Contract) và chứng từ thanh toán."
+            },
+            {
+                id: 2,
+                title: "Bài 2: Phân biệt Gross Weight và Net Weight",
+                content: "Trọng lượng Gross Weight trên Bill of Lading là 1.500 kg, còn Net Weight trên Packing List là 1.350 kg. Trọng lượng nào được dùng để tính cước phí vận chuyển biển?",
+                answer: "Đáp án GV: Gross Weight (1.500 kg) được sử dụng để tính cước vận tải biển vì tính trên cả bao bì đóng gói thực tế."
+            },
+            {
+                id: 3,
+                title: "Bài 3: Xử lý khi số Invoice trên C/O lệch với Commercial Invoice",
+                content: "Khi đối chiếu C/O Form E thấy số Hóa đơn ghi 'INV-2026-A', nhưng Hóa đơn thực tế là 'INV-2026-B'. Tờ khai HQ có được chấp nhận hưởng ưu đãi thuế không?",
+                answer: "Đáp án GV: Không. C/O sẽ bị bác bỏ do không khớp số Hóa đơn thương mại (Box 10), doanh nghiệp phải áp thuế MFN thông thường hoặc xin sửa C/O."
+            },
+            {
+                id: 4,
+                title: "Bài 4: Tính Trị giá CIF từ giá FOB",
+                content: "Lô hàng giá FOB Shanghai = 20.000 USD. Cước vận chuyển F = 1.500 USD, Bảo hiểm I = 200 USD. Tính Trị giá Hải quan (CIF) theo USD?",
+                answer: "Đáp án GV: Trị giá CIF = FOB + F + I = 20.000 + 1.500 + 200 = 21.700 USD."
+            },
+            {
+                id: 5,
+                title: "Bài 5: Xác định thời hạn lưu kho miễn phí (Free Time)",
+                content: "Trên Arrival Notice ghi Free time là 5 days. Tàu cập cảng ngày 10/03/2026. Ngày muộn nhất doanh nghiệp phải lấy hàng ra khỏi bãi để không bị phạt demurrage?",
+                answer: "Đáp án GV: Ngày muộn nhất là 15/03/2026."
+            },
+            {
+                id: 6,
+                title: "Bài 6: Phân biệt Master Bill và House Bill",
+                content: "Ai là bên phát hành House Bill of Lading (HBL) cho chủ hàng thực tế?",
+                answer: "Đáp án GV: Công ty giao nhận vận tải (Freight Forwarder) cấp cho chủ hàng thực tế (Shipper/Consignee)."
+            },
+            {
+                id: 7,
+                title: "Bài 7: Ý nghĩa của tiêu chí xuất xứ 'WO'",
+                content: "Mục 'Origin Criterion' trên C/O ghi chữ 'WO' có ý nghĩa gì?",
+                answer: "Đáp án GV: WO (Wholly Obtained) nghĩa là hàng hóa có xuất xứ thuần túy 100% tại quốc gia xuất khẩu."
+            },
+            {
+                id: 8,
+                title: "Bài 8: Điều kiện giao hàng EXW",
+                content: "Theo điều kiện EXW Incoterms 2020, người bán hay người mua có trách nhiệm làm thủ tục thông quan xuất khẩu?",
+                answer: "Đáp án GV: Người mua (Buyer) chịu toàn bộ trách nhiệm thông quan xuất khẩu và vận chuyển từ xưởng người bán."
+            },
+            {
+                id: 9,
+                title: "Bài 9: Xác định tỷ giá quy đổi tính thuế",
+                content: "Tỷ giá quy đổi ngoại tệ để tính Thuế Hải quan lấy theo tỷ giá của đơn vị nào?",
+                answer: "Đáp án GV: Lấy theo Tỷ giá hối hái tính thuế do Ngân hàng Nhà nước / Tổng cục Hải quan công bố tại thời điểm mở Tờ khai."
+            },
+            {
+                id: 10,
+                title: "Bài 10: Xử lý sai lệch số kiện trên Packing List và Bill of Lading",
+                content: "Packing List ghi 100 Cartons nhưng B/L ghi 90 Cartons. Người khai hải quan xử lý ra sao?",
+                answer: "Đáp án GV: Dừng khai báo, liên hệ hãng tàu & Shipper để xác nhận chính xác số lượng và yêu cầu chỉnh sửa B/L (Amended B/L) trước khi truyền tờ khai."
+            },
+            {
+                id: 11,
+                title: "Bài 11: Vai trò của Notify Party trên Vận đơn",
+                content: "Notify Party trên Bill of Lading là ai?",
+                answer: "Đáp án GV: Là bên nhận thông báo hàng đến khi tàu cập cảng (thường là Consignee hoặc công ty dich vụ khai thuê Hải quan)."
+            },
+            {
+                id: 12,
+                title: "Bài 12: Mẫu C/O dùng trong quan hệ thương mại Việt Nam - Trung Quốc",
+                content: "Doanh nghiệp nhập khẩu mặt hàng máy may từ Trung Quốc muốn hưởng ưu đãi thuế quan thì xin C/O Mẫu (Form) nào?",
+                answer: "Đáp án GV: C/O Mẫu E (Form E) thuộc Hiệp định ACFTA."
+            },
+            {
+                id: 13,
+                title: "Bài 13: Mục đích của giấy chứng nhận chất lượng (C/Q)",
+                content: "C/Q (Certificate of Quality) do ai cấp và phục vụ mục đích gì trong hồ sơ XNK?",
+                answer: "Đáp án GV: Do nhà sản xuất hoặc tổ chức giám định độc lập cấp, xác nhận hàng hóa đạt tiêu chuẩn chất lượng cam kết."
+            },
+            {
+                id: 14,
+                title: "Bài 14: Điều kiện giao hàng CIF",
+                content: "Trong điều kiện CIF, địa điểm chuyển giao rủi ro về hàng hóa từ người bán sang người mua ở đâu?",
+                answer: "Đáp án GV: Chuyển giao rủi ro khi hàng hóa đã được giao an toàn lên tàu tại Cảng xếp hàng (Port of Loading)."
+            },
+            {
+                id: 15,
+                title: "Bài 15: Phí D/O (Delivery Order Fee) là phí gì?",
+                content: "Phí D/O trên Thông báo hàng đến (Arrival Notice) do đơn vị nào thu và mục đích là gì?",
+                answer: "Đáp án GV: Do Hãng tàu/Forwarder thu để phát hành Lệnh giao hàng (D/O) cho người nhận hàng mang ra cảng lấy hàng."
+            },
+            {
+                id: 16,
+                title: "Bài 16: Phân biệt Thuế MFN và Thuế Ưu đãi Đặc biệt",
+                content: "Thuế MFN và Thuế suất Ưu đãi đặc biệt khác nhau cơ bản thế nào?",
+                answer: "Đáp án GV: Thuế MFN áp dụng cho các nước thành viên WTO. Thuế Ưu đãi đặc biệt (thường 0%) áp dụng cho các nước ký Hiệp định FTA và có C/O hợp lệ."
+            },
+            {
+                id: 17,
+                title: "Bài 17: Bản chất của Vận đơn đích danh (Straight B/L)",
+                content: "Vận đơn đích danh có thể chuyển nhượng bằng cách ký hậu (Endorsement) được không?",
+                answer: "Đáp án GV: Không. Vận đơn đích danh ghi rõ tên người nhận hàng nên không chuyển nhượng được."
+            },
+            {
+                id: 18,
+                title: "Bài 18: Xác định mã HS Code của hàng hóa",
+                content: "Mã HS Code quy định bao nhiêu chữ số ở cấp độ chuẩn Hệ thống Hài hòa Toàn cầu?",
+                answer: "Đáp án GV: Cấp độ chuẩn quốc tế là 6 chữ số (Ở Việt Nam thường mở rộng chi tiết thành 8 chữ số)."
+            },
+            {
+                id: 19,
+                title: "Bài 19: Khái niệm Telex Release B/L",
+                content: "Telex Release (Điện giải phóng hàng) có ưu điểm gì so với sử dụng Bill gốc (Original B/L)?",
+                answer: "Đáp án GV: Giúp người nhận hàng nhận hàng nhanh chóng mà không cần chờ bộ B/L gốc gửi qua bưu điện, tránh chi phí lưu cont/bãi."
+            },
+            {
+                id: 20,
+                title: "Bài 20: Tầm quan trọng của việc khớp Tên hàng giữa các chứng từ",
+                content: "Nếu Tên hàng trên Invoice ghi 'Computer Keyboard' nhưng trên C/O ghi 'Computer Accessories' thì xử lý ra sao?",
+                answer: "Đáp án GV: Hải quan sẽ yêu cầu giải trình hoặc từ chối C/O vì tên hàng chung chung không xác định rõ mã HS chính xác."
+            },
+            {
+                id: 21,
+                title: "Bài 21: Phí THC (Terminal Handling Charge) là phí gì?",
+                content: "Phí THC là chi phí bốc xếp container tại bãi cảng hay chi phí vận chuyển đường biển?",
+                answer: "Đáp án GV: Là phí bốc xếp container tại cảng (từ bãi lên tàu hoặc từ tàu xuống bãi cảng)."
+            },
+            {
+                id: 22,
+                title: "Bài 22: Phân biệt Luồng Xanh, Luồng Vàng và Luồng Đỏ",
+                content: "Lô hàng bị phân vào Luồng Đỏ thì doanh nghiệp phải thực hiện những thủ tục gì?",
+                answer: "Đáp án GV: Phải nộp/xuất trình hồ sơ giấy để Hải quan kiểm tra chi tiết VÀ đưa hàng hóa ra bãi kiểm hóa để Hải quan kiểm tra thực tế hàng."
+            },
+            {
+                id: 23,
+                title: "Bài 23: Ý nghĩa của Seal No (Số niêm phong)",
+                content: "Số Seal trên B/L có tác dụng gì trong giám sát hải quan?",
+                answer: "Đáp án GV: Đảm bảo nguyên vẹn thùng container trong quá trình vận chuyển, không bị tháo mở hay tráo đổi hàng hóa."
+            },
+            {
+                id: 24,
+                title: "Bài 24: Thời hạn đăng ký Tờ khai hải quan nhập khẩu",
+                content: "Tờ khai hải quan nhập khẩu được đăng ký trước ngày hàng đến cảng hoặc trong thời hạn bao nhiêu ngày kể từ ngày hàng đến cửa khẩu?",
+                answer: "Đáp án GV: Trong thời hạn 30 ngày kể từ ngày hàng hóa đến cửa khẩu."
+            },
+            {
+                id: 25,
+                title: "Bài 25: Phương thức thanh toán L/C (Thư tín dụng)",
+                content: "Trong phương thức L/C, đơn vị nào cam kết thanh toán tiền hàng cho người bán?",
+                answer: "Đáp án GV: Ngân hàng phát hành (Issuing Bank) đại diện cho người mua cam kết thanh toán."
+            },
+            {
+                id: 26,
+                title: "Bài 26: Xử lý khi CO bị sai chỉ tiêu trọng lượng Gross Weight",
+                content: "Số Gross weight trên C/O bị chênh lệch +2% so với Packing List do làm tròn số thì C/O có bị bác bỏ không?",
+                answer: "Đáp án GV: Sai lệch nhỏ do làm tròn số không làm thay đổi bản chất xuất xứ thì vẫn chấp nhận được theo quy định của Phụ lục Quản lý C/O."
+            },
+            {
+                id: 27,
+                title: "Bài 27: Tiêu chí chuyển đổi mã số hàng hóa CTH",
+                content: "Tiêu chí 'CTH' trong C/O có nghĩa là gì?",
+                answer: "Đáp án GV: Change in Tariff Heading - Chuyển đổi mã số hàng hóa ở cấp độ 4 chữ số."
+            },
+            {
+                id: 28,
+                title: "Bài 28: Trách nhiệm thanh toán cước biển trong điều kiện FOB",
+                content: "Trong hợp đồng FOB, bên nào là người chịu trách nhiệm ký hợp đồng vận tải và trả cước biển?",
+                answer: "Đáp án GV: Bên mua (Buyer / Importer)."
+            },
+            {
+                id: 29,
+                title: "Bài 29: Vai trò của Tờ khai Hải quan (Customs Declaration)",
+                content: "Tờ khai hải quan là chứng từ do ai lập và có giá trị pháp lý ra sao?",
+                answer: "Đáp án GV: Do chủ hàng/đại lý hải quan lập và đăng ký với cơ quan Hải quan để làm thủ tục thông quan lô hàng."
+            },
+            {
+                id: 30,
+                title: "Bài 30: Kiểm tra tính hợp lệ của con dấu trên C/O",
+                content: "Nếu con dấu và chữ ký trên C/O bản giấy bị mờ, không rõ danh tính cán bộ cấp thì Hải quan xử lý thế nào?",
+                answer: "Đáp án GV: Hải quan sẽ tạm dừng ưu đãi thuế và gửi văn bản minh xác (verification) sang cơ quan cấp C/O của nước xuất khẩu."
+            }
+        ];
+
+        // RENDER DẠNG BÀI TẬP TAB KIỂM TRA
+        function renderExamTab() {
+            const container = document.getElementById('exam-list');
+            container.innerHTML = '';
+
+            examQuestions.forEach((q) => {
+                const item = document.createElement('div');
+                item.className = 'exam-item';
+                item.innerHTML = `
+                    <div class="exam-item-title"><i class="fa-solid fa-pen-to-square"></i> ${q.title}</div>
+                    <div style="font-size: 0.9rem; color: #334155; margin-bottom: 0.5rem;">${q.content}</div>
+                    <label style="font-size: 0.82rem; font-weight: bold; color: var(--dark-blue);">Bài làm của Sinh viên:</label>
+                    <textarea id="ans-${q.id}" class="student-answer-area" placeholder="Nhập câu trả lời / lời giải chi tiết của sinh viên tại đây..."></textarea>
+                    
+                    <div id="gv-ans-${q.id}" class="gv-answer-box">
+                        <i class="fa-solid fa-square-check"></i> <strong>ĐÁP ÁN DÀNH CHO GIẢNG VIÊN:</strong><br>
+                        ${q.answer}
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        // MỞ MODAL GV
+        function openGvModal() {
+            document.getElementById('gv-modal').style.display = 'flex';
+            document.getElementById('gv-pass-input').focus();
+        }
+
+        // ĐÓNG MODAL GV
+        function closeGvModal() {
+            document.getElementById('gv-modal').style.display = 'none';
+            document.getElementById('gv-pass-error').style.display = 'none';
+            document.getElementById('gv-pass-input').value = '';
+        }
+
+        // XÁC NHẬN MẬT KHẨU GV
+        function checkGvPass() {
+            const pass = document.getElementById('gv-pass-input').value;
+            if (pass === 'CDCT@1976') {
+                isGvLoggedIn = true;
+                document.getElementById('badge-gv').style.display = 'inline-flex';
+                closeGvModal();
+                toggleGvAnswers(true);
+                alert('Xác thực Giảng viên thành công! Đáp án của 30 bài tập đã được hiển thị.');
+            } else {
+                document.getElementById('gv-pass-error').style.display = 'block';
+            }
+        }
+
+        // HIỂN THỊ / ẨN ĐÁP ÁN GV
+        function toggleGvAnswers(show) {
+            examQuestions.forEach(q => {
+                const el = document.getElementById(`gv-ans-${q.id}`);
+                if (el) {
+                    el.style.display = show ? 'block' : 'none';
+                }
+            });
+        }
+
+        // KẾT XUẤT PDF TRANG A4 (DỌC HOẶC NGANG)
+        function exportPDF(orientation) {
+            const name = document.getElementById('student-name').value.trim();
+            const studentId = document.getElementById('student-id').value.trim();
+
+            if (!name || !studentId) {
+                alert('Vui lòng nhập đầy đủ HỌ VÀ TÊN và MÃ SỐ SINH VIÊN trước khi kết xuất file PDF!');
+                return;
+            }
+
+            // Tạo khung HTML tạm phục vụ kết xuất PDF
+            const tempDiv = document.getElementById('pdf-export-temp');
+            const now = new Date();
+            const dateStr = `${now.getHours()}:${now.getMinutes()} - ${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
+
+            let htmlContent = `
+                <div id="pdf-export-container">
+                    <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 15px;">
+                        <h2 style="font-size: 16px; margin-bottom: 4px; text-transform: uppercase;">BÀI LÀM KIỂM TRA CHƯƠNG 2A: BỘ CHỨNG TỪ XNK</h2>
+                        <p style="font-size: 12px; font-style: italic;">Phần mềm giảng dạy trực quan Chứng từ Hải quan</p>
+                    </div>
+
+                    <div style="background-color: #f8fafc; border: 1px solid #cbd5e1; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-size: 11px;">
+                        <table style="width: 100%; border: none;">
+                            <tr>
+                                <td><strong>Họ và tên sinh viên:</strong> ${name}</td>
+                                <td><strong>Mã số sinh viên (MSSV):</strong> ${studentId}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Thời gian nộp bài:</strong> ${dateStr}</td>
+                                <td><strong>Tổng số bài tập:</strong> 30 Bài tập luyện tập</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <h3 style="font-size: 13px; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 10px;">CHI TIẾT BÀI LÀM SINH VIÊN</h3>
+            `;
+
+            examQuestions.forEach(q => {
+                const studentAns = document.getElementById(`ans-${q.id}`).value.trim() || "(Sinh viên chưa nhập câu trả lời)";
+                htmlContent += `
+                    <div style="margin-bottom: 12px; page-break-inside: avoid;">
+                        <div style="font-weight: bold; font-size: 11px; color: #0369a1;">${q.title}</div>
+                        <div style="font-size: 10.5px; color: #334155; margin: 2px 0;"><strong>Đề bài:</strong> ${q.content}</div>
+                        <div style="font-size: 10.5px; background: #f1f5f9; padding: 6px; border-left: 3px solid #0284c7; margin-top: 4px;">
+                            <strong>Bài làm của sinh viên:</strong><br>
+                            ${studentAns.replace(/\n/g, '<br>')}
+                        </div>
+                    </div>
+                `;
+            });
+
+            htmlContent += `</div>`;
+            tempDiv.innerHTML = htmlContent;
+
+            // Cấu hình html2pdf
+            const opt = {
+                margin:       10,
+                filename:     `Bai_Lam_Kiem_Tra_${studentId}_${name.replace(/\s+/g, '_')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: orientation }
+            };
+
+            // Tiến hành tạo và tải file PDF
+            html2pdf().set(opt).from(tempDiv.children[0]).save().then(() => {
+                tempDiv.innerHTML = '';
+            });
+        }
+
+        // Tab Navigation Function
+        function switchTab(tabId, element) {
+            // Hide all tab content
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            // Remove active class from menu items
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabId).classList.add('active');
+            
+            // Highlight active menu item
+            if (element) {
+                element.classList.add('active');
+            }
+        }
+
+        // Accordion Toggle Function
+        function toggleAccordion(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('i');
+            
+            if (content.classList.contains('open')) {
+                content.classList.remove('open');
+                icon.className = 'fa-solid fa-chevron-down';
+            } else {
+                content.classList.add('open');
+                icon.className = 'fa-solid fa-chevron-up';
+            }
+        }
+
+        // Tooltip Popover Function for Interactive Hotspots
+        function showTip(element, text) {
+            const tooltip = document.getElementById('tooltip');
+            
+            // Highlight element
+            document.querySelectorAll('.hotspot').forEach(e => e.classList.remove('hotspot-active'));
+            element.classList.add('hotspot-active');
+
+            const rect = element.getBoundingClientRect();
+            tooltip.innerText = text;
+            tooltip.style.display = 'block';
+            tooltip.style.top = (rect.bottom + window.scrollY + 5) + 'px';
+            tooltip.style.left = Math.min(rect.left + window.scrollX, window.innerWidth - 260) + 'px';
+        }
+
+        // Hide tooltip on outside click
+        document.addEventListener('click', function(e) {
+            if (!e.target.classList.contains('hotspot')) {
+                document.getElementById('tooltip').style.display = 'none';
+                document.querySelectorAll('.hotspot').forEach(el => el.classList.remove('hotspot-active'));
+            }
+        });
+
+        // Toggle C/O Selection in Calculator
+        function toggleCo() {
+            const coVal = document.getElementById('calc-co-select').value;
+            const taxInput = document.getElementById('calc-import-tax-rate');
+            if (coVal === 'yes') {
+                taxInput.value = 0;
+            } else {
+                taxInput.value = 10;
+            }
+            calculateCustoms();
+        }
+
+        // Customs Calculator Function
+        function calculateCustoms() {
+            const fob = parseFloat(document.getElementById('calc-fob').value) || 0;
+            const freight = parseFloat(document.getElementById('calc-freight').value) || 0;
+            const insurance = parseFloat(document.getElementById('calc-insurance').value) || 0;
+            const rate = parseFloat(document.getElementById('calc-rate').value) || 0;
+            const importTaxRate = parseFloat(document.getElementById('calc-import-tax-rate').value) || 0;
+
+            const cifUsd = fob + freight + insurance;
+            const cifVnd = cifUsd * rate;
+            
+            const importTaxVnd = cifVnd * (importTaxRate / 100);
+            const vatTaxVnd = (cifVnd + importTaxVnd) * 0.10; // VAT 10%
+            const totalTaxVnd = importTaxVnd + vatTaxVnd;
+
+            // Update UI
+            document.getElementById('res-fob').innerText = '$' + fob.toLocaleString('en-US', {minimumFractionDigits: 2});
+            document.getElementById('res-fi').innerText = '$' + (freight + insurance).toLocaleString('en-US', {minimumFractionDigits: 2});
+            document.getElementById('res-cif-usd').innerText = '$' + cifUsd.toLocaleString('en-US', {minimumFractionDigits: 2});
+            document.getElementById('res-cif-vnd').innerText = cifVnd.toLocaleString('vi-VN') + ' VND';
+            document.getElementById('res-import-tax').innerText = importTaxVnd.toLocaleString('vi-VN') + ' VND (' + importTaxRate + '%)';
+            document.getElementById('res-vat-tax').innerText = vatTaxVnd.toLocaleString('vi-VN') + ' VND';
+            document.getElementById('res-total-tax').innerText = totalTaxVnd.toLocaleString('vi-VN') + ' VND';
+        }
+
+        // Audit Quiz Option Checking Function
+        function checkAudit(btn, isCorrect, qId) {
+            const parent = btn.parentElement;
+            const buttons = parent.querySelectorAll('.option-btn');
+            
+            buttons.forEach(b => {
+                b.classList.remove('correct', 'wrong');
+            });
+
+            if (isCorrect) {
+                btn.classList.add('correct');
+            } else {
+                btn.classList.add('wrong');
+            }
+
+            document.getElementById(qId + '-exp').style.display = 'block';
+        }
+
+        // Khởi tạo ban đầu
+        calculateCustoms();
+        renderExamTab();
+        autoDistributeCharges();
+    </script>
+</body>
+</html>
